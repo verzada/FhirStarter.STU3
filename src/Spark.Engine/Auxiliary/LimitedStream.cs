@@ -10,10 +10,10 @@ namespace Spark.Engine.Auxiliary
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="sizeLimitInBytes"></param>
-        public LimitedStream (Stream stream, long sizeLimitInBytes = 2048)
+        public LimitedStream(Stream stream, long sizeLimitInBytes = 2048)
         {
-            _innerStream = stream ?? throw new ArgumentNullException("stream cannot be null");
-            this._sizeLimitInBytes = sizeLimitInBytes;
+            _innerStream = stream;
+            _sizeLimitInBytes = sizeLimitInBytes;
         }
 
         private readonly Stream _innerStream;

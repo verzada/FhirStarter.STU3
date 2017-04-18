@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spark.Engine", "Spark.Engine\Spark.Engine.csproj", "{73D29C45-01B7-4B14-95F1-D5B6DEA77404}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FhirStarter.Bonfire.STU3", "FhirStarter.Bonfire.STU3\FhirStarter.Bonfire.STU3.csproj", "{874D24E0-90DC-49F3-A927-196159B8241F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FhirStarter.Flare.STU3", "FhirStarter.Flare.STU3\FhirStarter.Flare.STU3.csproj", "{03713BD1-307F-4FB7-AC11-26CDE4D3E5D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{BE178F67-24BA-4158-A305-8AF90D0C8DF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{888F83B2-C1E2-43E2-88A6-4A4C0F5CF887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FHIRStarter.Inferno", "FHIRStarter.Inferno\FHIRStarter.Inferno.csproj", "{8B1D06CE-6A59-4012-BD7A-AB799FBF0DF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +25,25 @@ Global
 		{73D29C45-01B7-4B14-95F1-D5B6DEA77404}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73D29C45-01B7-4B14-95F1-D5B6DEA77404}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73D29C45-01B7-4B14-95F1-D5B6DEA77404}.Release|Any CPU.Build.0 = Release|Any CPU
+		{874D24E0-90DC-49F3-A927-196159B8241F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{874D24E0-90DC-49F3-A927-196159B8241F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{874D24E0-90DC-49F3-A927-196159B8241F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{874D24E0-90DC-49F3-A927-196159B8241F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03713BD1-307F-4FB7-AC11-26CDE4D3E5D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03713BD1-307F-4FB7-AC11-26CDE4D3E5D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03713BD1-307F-4FB7-AC11-26CDE4D3E5D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03713BD1-307F-4FB7-AC11-26CDE4D3E5D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1D06CE-6A59-4012-BD7A-AB799FBF0DF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1D06CE-6A59-4012-BD7A-AB799FBF0DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1D06CE-6A59-4012-BD7A-AB799FBF0DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1D06CE-6A59-4012-BD7A-AB799FBF0DF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{73D29C45-01B7-4B14-95F1-D5B6DEA77404} = {BE178F67-24BA-4158-A305-8AF90D0C8DF8}
+		{874D24E0-90DC-49F3-A927-196159B8241F} = {BE178F67-24BA-4158-A305-8AF90D0C8DF8}
+		{03713BD1-307F-4FB7-AC11-26CDE4D3E5D7} = {BE178F67-24BA-4158-A305-8AF90D0C8DF8}
 	EndGlobalSection
 EndGlobal

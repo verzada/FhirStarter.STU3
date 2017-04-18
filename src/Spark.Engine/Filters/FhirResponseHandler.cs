@@ -27,10 +27,6 @@ namespace Spark.Engine.Filters
                 }, 
                 cancellationToken
             );
-             
         }
-
     }
-
-    
 }

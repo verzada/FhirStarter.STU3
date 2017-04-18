@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>FhirStarter.Flare.STU3</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>verzada</authors>
+    <owners>$author$</owners>
+    <description>$description$</description>
+    <copyright>$copyright$</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/verzada/FhirStarter</projectUrl>
+    <language>english</language>
+    <releaseNotes>Updated the package dependency for Bonfire. Improved support for OperationDefinition</releaseNotes>
+    <summary>The web project adds a Global.asax file and a xslt to the web server. Should not be referenced to a library, only to a webservice.</summary>
+    <tags>fhir fhirstarter dstu2 ninject</tags>
+  </metadata>
+  <files>
+    <file src="Global.asax" target="." />
+  </files>
+</package>

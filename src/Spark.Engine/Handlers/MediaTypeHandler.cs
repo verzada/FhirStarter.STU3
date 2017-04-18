@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Hl7.Fhir.Rest;
 using Spark.Engine.Core;
 using Spark.Engine.Extensions;
 

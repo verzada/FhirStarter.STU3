@@ -10,10 +10,16 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
+using Hl7.Fhir.Serialization;
+using Newtonsoft.Json;
 using Spark.Engine.Core;
 using Spark.Engine.Extensions;
+using Task = System.Threading.Tasks.Task;
 
 namespace Spark.Engine.Formatters
 {

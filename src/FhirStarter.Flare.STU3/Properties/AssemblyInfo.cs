@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FhirStarter.Spark.Engine.STU3")]
+[assembly: AssemblyTitle("FhirStarter.Flare.STU3")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FhirStarter.Spark.Engine.STU3")]
+[assembly: AssemblyProduct("FhirStarter.Flare.STU3")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("73d29c45-01b7-4b14-95f1-d5b6dea77404")]
+[assembly: Guid("03713bd1-307f-4fb7-ac11-26cde4d3e5d7")]
 
 // Version information for an assembly consists of the following four values:
 //
