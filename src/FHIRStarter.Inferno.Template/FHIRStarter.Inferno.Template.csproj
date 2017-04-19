@@ -250,7 +250,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="BeforeBuild">
-    <Copy SourceFiles="$(WDTargetDir)..\FhirStarter.Flare.STU3\Global.asax" DestinationFolder="." />
-  </Target>
 </Project>
