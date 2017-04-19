@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>FhirStarter.Flare.STU3</id>
-    <version>$version$</version>
+    <version>$version$-alpha</version>
     <title>$title$</title>
     <authors>verzada</authors>
     <owners>$author$</owners>
@@ -13,7 +13,7 @@
     <language>english</language>
     <releaseNotes>Updated the package dependency for Bonfire. Improved support for OperationDefinition</releaseNotes>
     <summary>The web project adds a Global.asax file and a xslt to the web server. Should not be referenced to a library, only to a webservice.</summary>
-    <tags>fhir fhirstarter dstu2 ninject</tags>
+    <tags>fhir fhirstarter flare stu3 ninject</tags>
   </metadata>
   <files>
     <file src="Global.asax" target="." />

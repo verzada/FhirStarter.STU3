@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>FhirStarter.Bonfire.STU3</id>
-    <version>$version$</version>
+    <version>$version$-alpha</version>
     <title>$title$</title>
     <authors>verzada</authors>
     <owners>$author$</owners>
@@ -13,6 +13,6 @@
     <language>english</language>
     <summary>The main library for FhirStarter. Contains the IFhirService interface which FHIR services are based on, plus exception handling and other stuff which is not necessarily related to web</summary>
     <releaseNotes>Fixed the support for OperationDefinition. Check the example in FhirStarter.Inferno.Template to see how it is done.</releaseNotes>
-    <tags>fhir fhirstarter dstu2 ninject</tags>
+    <tags>fhir fhirstarter bonfire stu3 ninject</tags>
   </metadata>
 </package>
