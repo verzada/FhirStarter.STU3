@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>FhirStarter.Spark.Engine.STU3</id>
-    <version>$version$-alpha</version>
+    <version>$version$</version>
     <title>$title$</title>
     <authors>verzada</authors>
     <owners>$author$</owners>
