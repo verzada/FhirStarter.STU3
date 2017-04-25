@@ -43,11 +43,11 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FhirStarter.Bonfire.STU3, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Bonfire.STU3.0.9.0-alpha\lib\net452\FhirStarter.Bonfire.STU3.dll</HintPath>
+    <Reference Include="FhirStarter.Bonfire.STU3, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Bonfire.STU3.0.9.1\lib\net452\FhirStarter.Bonfire.STU3.dll</HintPath>
     </Reference>
-    <Reference Include="FhirStarter.Flare.STU3, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Flare.STU3.0.9.0-alpha\lib\net452\FhirStarter.Flare.STU3.dll</HintPath>
+    <Reference Include="FhirStarter.Flare.STU3, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Flare.STU3.0.9.1\lib\net452\FhirStarter.Flare.STU3.dll</HintPath>
     </Reference>
     <Reference Include="Hl7.Fhir.STU3.Core, Version=0.93.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.STU3.0.93.0\lib\net45\Hl7.Fhir.STU3.Core.dll</HintPath>
@@ -105,8 +105,8 @@
       <HintPath>..\packages\Ninject.Web.WebApi.WebHost.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.WebHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Spark.Engine, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Spark.Engine.STU3.0.9.0-alpha\lib\net452\Spark.Engine.dll</HintPath>
+    <Reference Include="Spark.Engine, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Spark.Engine.STU3.0.9.1\lib\net452\Spark.Engine.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
