@@ -12,7 +12,7 @@
     <projectUrl>https://github.com/verzada/FhirStarter.STU3</projectUrl>
     <language>english</language>
     <summary>The engine which FhirStarter is based on. Spark is developed by Furore (https://github.com/furore-fhir/spark). Contains most of the logic which handles FHIR requests and responses. </summary>
-    <releaseNotes>Updated to support STU3</releaseNotes>
+    <releaseNotes>Updated references for STU3</releaseNotes>
     <tags>fhir fhirstarter spark STU3 ninject</tags>
   </metadata>
 </package>
