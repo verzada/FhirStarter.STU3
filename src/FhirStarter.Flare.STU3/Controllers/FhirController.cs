@@ -26,7 +26,7 @@ namespace FhirStarter.Flare.STU3.Controllers
     {
         private readonly ICollection<IFhirService> _fhirServices;
         private readonly ServiceHandler _handler = new ServiceHandler();
-        private readonly ProfileValidator _profileValidator;
+        private readonly ProfileValidator _profileValidator = null;
 
         public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator)
         {
@@ -34,6 +34,11 @@ namespace FhirStarter.Flare.STU3.Controllers
             _profileValidator = profileValidator;
         }
 
+        public FhirController(ICollection<IFhirService> services)
+        {
+            _fhirServices = services;
+
+        }
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
         public HttpResponseMessage Read(string type, string id)
         {

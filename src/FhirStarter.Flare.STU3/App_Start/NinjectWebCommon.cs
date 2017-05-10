@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Reflection;
 using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
@@ -88,6 +89,9 @@ namespace FhirStarter.Flare.STU3
 
         private static void BindProfileValidator(IKernel kernel)
         {
+            var setting = ConfigurationManager.AppSettings["EnableValidation"];
+
+            if (setting == null || !Convert.ToBoolean(setting)) return;
             var instance = new ProfileValidator(true, true, false, Assembly.GetExecutingAssembly());
             kernel.Bind<ProfileValidator>().ToConstant(instance);
         }
