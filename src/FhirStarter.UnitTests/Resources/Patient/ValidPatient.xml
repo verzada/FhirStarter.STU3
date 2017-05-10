@@ -1,0 +1,25 @@
+﻿<Patient xmlns="http://hl7.org/fhir">
+  <id value="01486124837"/>
+  <meta>
+    <profile value="http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient"/>
+  </meta>
+  <identifier>
+    <use value="official"/>
+    <system value="urn:oid:2.16.578.1.34.2.1"/>
+    <value value="01486124837"/>
+  </identifier>
+  <name>
+    <use value="usual"/>
+    <family value="Pyykkönen*"/>
+    <given value="Fabrice*"/>
+  </name>
+  <gender value="female"/>
+  <birthDate value="1961-08-01"/>
+  <address>
+    <use value="home"/>
+    <line value="Åsvegen 6, 43363 Sevedalen, Sverige"/>
+    <city value="BODØ"/>
+    <postalCode value="8027"/>
+    <country value="Norge"/>
+  </address>
+</Patient>

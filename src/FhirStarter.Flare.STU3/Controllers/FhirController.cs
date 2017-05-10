@@ -6,9 +6,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Xml.Linq;
 using FhirStarter.Bonfire.STU3.Filter;
 using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Service;
+using FhirStarter.Bonfire.STU3.Validation;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Spark.Engine.Core;
@@ -24,10 +26,12 @@ namespace FhirStarter.Flare.STU3.Controllers
     {
         private readonly ICollection<IFhirService> _fhirServices;
         private readonly ServiceHandler _handler = new ServiceHandler();
+        private readonly ProfileValidator _profileValidator;
 
-        public FhirController(ICollection<IFhirService> services)
+        public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator)
         {
             _fhirServices = services;
+            _profileValidator = profileValidator;
         }
 
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
@@ -89,14 +93,12 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         private HttpResponseMessage SendResponse(Base resource)
         {
-            //var validationResult = _validator.Validate(resource);
-            //if (validationResult.Issue.Count != 0)
-            //{
-            //    resource = validationResult;
-            //}
+           
             var headers = Request.Headers;
             var accept = headers.Accept;
             var returnJson = ReturnJson(accept);
+
+            resource = ValidateResource(resource);
 
             StringContent httpContent;
             if (!returnJson)
@@ -114,6 +116,18 @@ namespace FhirStarter.Flare.STU3.Controllers
             }
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = httpContent };
             return response;
+        }
+
+        private Base ValidateResource(Base resource)
+        {
+            if (_profileValidator == null) return resource;
+            var resourceAsXDocument = XDocument.Parse(FhirSerializer.SerializeToXml(resource));
+            var validationResult = _profileValidator.Validate(resourceAsXDocument.CreateReader(), true);
+            if (validationResult.Issue.Count > 0)
+            {
+                resource = validationResult;
+            }
+            return resource;
         }
 
         private static bool ReturnJson(HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> accept)

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Log;
+using FhirStarter.Bonfire.STU3.Validation;
 using FhirStarter.Flare.STU3;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
@@ -73,19 +74,31 @@ namespace FhirStarter.Flare.STU3
                 {
                     foreach (Type classType in asm.GetTypes())
                     {
-                        if (fhirService.IsAssignableFrom(classType) && !classType.IsInterface && !classType.IsAbstract)
-                        {
-                            var instance = (IFhirService)Activator.CreateInstance(classType);
-                            kernel.Bind<IFhirService>().ToConstant(instance);
-                        }
+                        BindIFhirServices(kernel, fhirService, classType);
                     }
                 }
+                BindProfileValidator(kernel);
             }
             catch (ReflectionTypeLoadException ex)
             {
                 ExceptionLogger.LogReflectionTypeLoadException(ex);
             }
 
+        }
+
+        private static void BindProfileValidator(IKernel kernel)
+        {
+            var instance = new ProfileValidator(true, true, false, Assembly.GetExecutingAssembly());
+            kernel.Bind<ProfileValidator>().ToConstant(instance);
+        }
+
+        private static void BindIFhirServices(IKernel kernel, Type fhirService, Type classType)
+        {
+            if (fhirService.IsAssignableFrom(classType) && !classType.IsInterface && !classType.IsAbstract)
+            {
+                var instance = (IFhirService) Activator.CreateInstance(classType);
+                kernel.Bind<IFhirService>().ToConstant(instance);
+            }
         }
     }
 }
