@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <lastUpdated value="2017-01-13T13:52:15.95+01:00" />
+  </meta>
+  <url value="http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" />
+  <name value="Identification.Patient.Patient" />
+  <status value="draft" />
+  <description value="Structure definition for the Patient resource supported by the Identification.Patient service" />
+  <kind value="resource" />
+  <constrainedType value="Patient" />
+  <abstract value="false" />
+  <base value="http://hl7.org/fhir/StructureDefinition/Patient" />
+  <differential>
+    <element>
+      <path value="Patient" />
+      <type>
+        <code value="Patient" />
+      </type>
+    </element>
+    <element>
+      <path value="Patient.identifier.id" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.identifier.use" />
+      <min value="1" />
+    </element>
+    <element>
+      <path value="Patient.identifier.type" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.identifier.value" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.identifier.period" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.identifier.assigner" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.active" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.name.id" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.name.use" />
+      <min value="1" />
+    </element>
+    <element>
+      <path value="Patient.name.text" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.name.family" />
+      <max value="1" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.name.given" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.name.prefix" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.name.suffix" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.name.period" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.telecom" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.gender" />
+      <min value="1" />
+    </element>
+    <element>
+      <path value="Patient.birthDate" />
+      <comments value="Should always be present, but we haven't received a guarantee that it exist in source data so the cardinality is defined as 0..1." />
+    </element>
+    <element>
+      <path value="Patient.deceased[x]" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.address.id" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.address.type" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.address.text" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.address.line" />
+      <max value="1" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.address.city" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.address.district" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.address.state" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.address.postalCode" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.address.country" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.address.period" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.maritalStatus" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.multipleBirth[x]" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.photo" />
+      <max value="0" />
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Contact" />
+      </extension>
+      <path value="Patient.contact" />
+      <max value="0" />
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Animal" />
+      </extension>
+      <path value="Patient.animal" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.communication" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.careProvider" />
+      <max value="1" />
+      <type>
+        <code value="Reference" />
+        <profile value="http://helse-nord.no/FHIR/profiles/Identification.PrimaryPhysician/Practitioner" />
+      </type>
+    </element>
+    <element>
+      <path value="Patient.careProvider.reference" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.careProvider.display" />
+      <patternString value="^.{1,}" />
+    </element>
+    <element>
+      <path value="Patient.managingOrganization" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Patient.link" />
+      <max value="0" />
+    </element>
+  </differential>
+</StructureDefinition>

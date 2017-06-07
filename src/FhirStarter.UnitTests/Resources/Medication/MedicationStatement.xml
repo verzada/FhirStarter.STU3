@@ -1,0 +1,59 @@
+﻿<MedicationStatement xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <id value="c7aed0a1-dc4f-4d24-ae89-267001a34fc1" />
+  <contained>
+    <Medication>
+      <id value="55cd860a-0ba9-4e87-93d6-3e4af00b0836" />
+      <text>
+        <status value="generated" />
+        <div xmlns="http://www.w3.org/1999/xhtml">Aclasta Inf væske 5 mg/100 ml</div>
+      </text>
+      <code>
+        <coding>
+          <system value="http://hl7.no/FHIR/Identifiers/FEST-identifikatorer" />
+          <code value="ID_8530F680-F918-4575-BCB1-5493E2DFE9F5" />
+          <display value="Aclasta Inf væske 5 mg/100 ml" />
+        </coding>
+        <coding>
+          <system value="http://www.whocc.no/atc_ddd_index/" />
+          <code value="M05BA08" />
+        </coding>
+      </code>
+      <manufacturer>
+        <display value="Novartis Europharm Limited" />
+      </manufacturer>
+    </Medication>
+  </contained>
+  <extension url="http://DIPS.no/Hl7/StructureDefinition/DrugUseExtension">
+    <valueCoding>
+      <system value="2.16.578.1.12.4.1.1.9101" />
+      <code value="2" />
+      <display value="Kur" />
+    </valueCoding>
+  </extension>
+  <identifier>
+    <system value="http://hl7.no/FHIR/Identifiers/ExternalIdentifier" />
+    <value value="76e072ff-eaae-4e60-81a4-d7e06262f969" />
+  </identifier>
+  <status value="active" />
+  <medicationReference>
+    <reference value="#55cd860a-0ba9-4e87-93d6-3e4af00b0836" />
+  </medicationReference>
+  <effectivePeriod>
+    <start value="0001-01-01" />
+    <end value="2016-04-07" />
+  </effectivePeriod>
+  <dateAsserted value="0001-01-01" />
+  <subject>
+    <reference value="Patient/12057900499" />
+  </subject>
+  <taken value="na" />
+  <reasonCode>
+    <text value="OSTEOPOROSEFOREBYGGING" />
+  </reasonCode>
+  <note>
+    <text value="123" />
+  </note>
+  <dosage>
+    <text value="Anonymisert" />
+  </dosage>
+</MedicationStatement>

@@ -78,5 +78,39 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Patient\ValidPatient.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\StructureDefinitions\Entities.Organization\Entities.Organization.Organization.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Resources\Medication\MedicationStatement.xml" />
+    <EmbeddedResource Include="Resources\DiagnosticsReport\DiagnosticReport.xml" />
+    <Content Include="Resources\StructureDefinitions\CareProvision.ProcedureRequest\CareProvision.ProcedureRequest.Practitioner.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\CareProvision.ProcedureRequest\CareProvision.ProcedureRequest.ProcedureRequest.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\CareProvision.ProcedureRequest\CareProvision.ProcedureRequest.Specimen.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\Diagnostic.MedicationStatement\Diagnostic.MedicationStatement.Medication.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\Diagnostic.MedicationStatement\Diagnostic.MedicationStatement.MedicationStatement.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\Diagnostic.MedicationStatement\Extension.MedicationStatementDrugUse.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\Diagnostics.DiagnosticReport\Diagnostics.DiagnosticReport.DiagnosticReport.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\Diagnostics.DiagnosticReport\Diagnostics.DiagnosticReport.Organization.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\Diagnostics.LabObservation\Diagnostics.LabObservation..xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
