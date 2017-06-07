@@ -9,7 +9,7 @@
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectUrl>https://github.com/verzada/FhirStarter</projectUrl>
+    <projectUrl>https://github.com/verzada/FhirStarter.STU3</projectUrl>
     <language>english</language>
     <releaseNotes>Updated the package dependency for Bonfire. Improved support for OperationDefinition</releaseNotes>
     <summary>The web project adds a Global.asax file and a xslt to the web server. Should not be referenced to a library, only to a webservice.</summary>
