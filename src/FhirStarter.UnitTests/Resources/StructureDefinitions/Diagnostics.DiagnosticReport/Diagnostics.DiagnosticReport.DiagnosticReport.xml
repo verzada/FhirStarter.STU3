@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <lastUpdated value="2017-06-06T16:39:58.205+02:00" />
+  </meta>
+  <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
+    <valueCode value="oo" />
+  </extension>
+  <url value="http://helse-nord.no/FHIR/profiles/Diagnostics.DiagnosticReport/DiagnosticReport" />
+  <name value="DiagnosticReport" />
+  <status value="draft" />
+  <date value="2017-05-23T10:19:49.4901367+02:00" />
+  <fhirVersion value="3.0.0" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="DiagnosticReport" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/DiagnosticReport" />
+  <derivation value="constraint" />
+  <differential>
+    <element>
+      <path value="DiagnosticReport.performer.actor" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/FHIR/profiles/CareProvision.ProcedureRequest/Practitioner" />
+        <aggregation value="contained" />
+      </type>
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/FHIR/profiles/Entities.Organization/Organization" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element>
+      <path value="DiagnosticReport.specimen" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/FHIR/profiles/CareProvision.ProcedureRequest/Specimen" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element>
+      <path value="DiagnosticReport.imagingStudy" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="DiagnosticReport.image" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="DiagnosticReport.codedDiagnosis" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="DiagnosticReport.presentedForm" />
+      <max value="0" />
+    </element>
+  </differential>
+</StructureDefinition>

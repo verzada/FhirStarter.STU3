@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Reflection;
 using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
@@ -91,9 +92,14 @@ namespace FhirStarter.Flare.STU3
         {
             var setting = ConfigurationManager.AppSettings["EnableValidation"];
 
+            var location = new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            var directoryInfo = new FileInfo(location.AbsolutePath).Directory;
             if (setting == null || !Convert.ToBoolean(setting)) return;
-            var instance = new ProfileValidator(true, true, false, Assembly.GetExecutingAssembly());
-            kernel.Bind<ProfileValidator>().ToConstant(instance);
+            if (directoryInfo != null)
+            {
+                var instance = new ProfileValidator(true, true, false, directoryInfo.FullName + @"\Resources\StructureDefinitions");
+                kernel.Bind<ProfileValidator>().ToConstant(instance);
+            }
         }
 
         private static void BindIFhirServices(IKernel kernel, Type fhirService, Type classType)

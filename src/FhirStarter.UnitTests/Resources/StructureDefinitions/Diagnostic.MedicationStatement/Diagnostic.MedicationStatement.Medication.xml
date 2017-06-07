@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <lastUpdated value="2017-05-23T14:22:41.999+02:00" />
+  </meta>
+  <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
+    <valueCode value="phx" />
+  </extension>
+  <url value="http://helse-nord.no/FHIR/profiles/Diagnostics.MedicationStatement/Medication" />
+  <name value="Medication" />
+  <status value="draft" />
+  <date value="2017-05-23T14:14:52.7734885+02:00" />
+  <fhirVersion value="3.0.0" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="Medication" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Medication" />
+  <derivation value="constraint" />
+</StructureDefinition>

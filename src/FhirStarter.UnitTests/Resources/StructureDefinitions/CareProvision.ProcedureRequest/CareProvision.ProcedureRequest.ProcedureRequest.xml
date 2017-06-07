@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <lastUpdated value="2017-06-07T12:18:21.386+02:00" />
+  </meta>
+  <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
+    <valueCode value="oo" />
+  </extension>
+  <url value="http://helse-nord.no/FHIR/profiles/CareProvision.ProcedureRequest/ProcedureRequest" />
+  <name value="ProcedureRequest" />
+  <status value="draft" />
+  <date value="2017-05-10T12:36:51.2352467+02:00" />
+  <fhirVersion value="3.0.0" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="ProcedureRequest" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/ProcedureRequest" />
+  <derivation value="constraint" />
+  <differential>
+    <element>
+      <path value="ProcedureRequest.identifier" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="system" />
+        </discriminator>
+        <rules value="openAtEnd" />
+      </slicing>
+      <min value="1" />
+      <max value="2" />
+    </element>
+    <element id="ProcedureRequest.identifier:requsition id">
+      <path value="ProcedureRequest.identifier" />
+      <sliceName value="requsition id" />
+      <short value="DIPS: requsition id" />
+      <definition value="Identifiers assigned to this order instance by the orderer and/or  the receiver and/or order fulfiller." />
+      <max value="2" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.use" />
+      <short value="DIPS: 'secondary' (usual | official | temp | secondary (If known))" />
+      <fixedCode value="secondary" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.type" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.system" />
+      <short value="DIPS: OID for DIPS requisition id" />
+      <fixedUri value="urn:oid:1.3.6.1.4.1.9038.60.1" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.value" />
+      <short value="DIPS: requisition id" />
+      <comment value="If the value is a full URI, then the system SHALL be urn:ietf:rfc:3986." />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.period" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.assigner" />
+      <max value="0" />
+    </element>
+    <element id="ProcedureRequest.identifier:requisition number">
+      <path value="ProcedureRequest.identifier" />
+      <sliceName value="requisition number" />
+      <short value="DIPS: requisition number" />
+      <max value="1" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.use" />
+      <short value="DIPS: 'official' (usual | official | temp | secondary (If known))" />
+      <fixedCode value="official" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.type" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.system" />
+      <short value="DIPS: OID for DIPS requisition number" />
+      <definition value="Establishes the namespace in which set of possible id values is unique." />
+      <fixedUri value="urn:oid:1.3.6.1.4.1.9038.60.2" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.value" />
+      <short value="DIPS: requisition number" />
+      <comment value="If the value is a full URI, then the system SHALL be urn:ietf:rfc:3986." />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.period" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.identifier.assigner" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.definition" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.basedOn" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.replaces" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.requisition" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.status" />
+      <short value="DIPS: External report status. Mapped from code list 3431 ROS-EKSTERNSTATUS (proposed | draft | planned | requested | received | accepted | in-progress | review | completed | cancelled | suspended | rejected | failed)" />
+      <definition value="The status of the order.&#xD;&#xA;&#xD;&#xA;Mapping from 3431 ROS-EKSTERNSTATUS:&#xD;&#xA;223587 Ferdig       'final'&#xD;&#xA;223589 Foreløpig    'partial'&#xD;&#xA;223591 IG  &#xD;&#xA;223593 IF&#xD;&#xA;263295 Revidert     'appended'&#xD;&#xA;263297 Foreløpig    'partial'&#xD;&#xA;263299 Endelig      'final'&#xD;&#xA;263301 Tillegg      'appended'&#xD;&#xA;263303 Henv.Reg.&#xD;&#xA;263305 Pro.RegPla&#xD;&#xA;263307 Tild.Time&#xD;&#xA;263309 Und.Gjen.&#xD;&#xA;263311 Diktert&#xD;&#xA;263313 Skr.UsFor&#xD;&#xA;263315 Signert&#xD;&#xA;263317 Korrigert    'corrected'&#xD;&#xA;263319 Sign/Korr    'corrected'&#xD;&#xA;263321 Us.slettet   'cancelled'&#xD;&#xA;" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.priority" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.doNotPerform" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.category" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.code.coding" />
+      <short value="DIPS: requested tests" />
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable">
+        <valueBoolean value="true" />
+      </extension>
+      <path value="ProcedureRequest.code.text" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.subject" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Patient" />
+        <aggregation value="referenced" />
+        <aggregation value="bundled" />
+      </type>
+    </element>
+    <element>
+      <path value="ProcedureRequest.context" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.occurrence[x]" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.asNeeded[x]" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.authoredOn" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.requester.agent" />
+      <type>
+        <code value="Reference" />
+        <profile value="http://helse-nord.no/FHIR/profiles/CareProvision.ProcedureRequest/Specimen" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Device" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element>
+      <path value="ProcedureRequest.requester.onBehalfOf" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.performerType" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.performer" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.reasonCode" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.reasonReference" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.supportingInfo" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.specimen" />
+      <short value="DIPS: analysed subjects as contained resources" />
+      <definition value="One or more specimens that the diagnostic investigation is about." />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/FHIR/profiles/Diagnostics.ProcedureRequest/Specimen" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element>
+      <path value="ProcedureRequest.bodySite" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.note" />
+      <max value="1" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.note.authorReference" />
+      <type>
+        <code value="Reference" />
+        <profile value="http://helse-nord.no/FHIR/profiles/CareProvision.ProcedureRequest/Practitioner" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Practitioner" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element>
+      <path value="ProcedureRequest.note.time" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="ProcedureRequest.relevantHistory" />
+      <max value="0" />
+    </element>
+  </differential>
+</StructureDefinition>

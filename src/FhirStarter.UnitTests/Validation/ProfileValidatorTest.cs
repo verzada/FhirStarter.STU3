@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -20,7 +22,12 @@ namespace FhirStarter.UnitTests.Validation
         [SetUp]
         public void Setup()
         {
-            _validator = new ProfileValidator(true, true, false, Assembly.Load("FhirStarter.Inferno"));
+            var assembly = Assembly.GetExecutingAssembly();
+            var location = new Uri(assembly.GetName().CodeBase);
+            var directoryInfo = new FileInfo(location.AbsolutePath).Directory;
+            Debug.Assert(directoryInfo != null, "directoryInfo != null");
+            Debug.Assert(directoryInfo.FullName != null, "directoryInfo.FullName != null");
+            _validator = new ProfileValidator(true, true, false, directoryInfo.FullName + @"\Resources\StructureDefinitions");
         }
 
         [TestCase("ValidPatient.xml")]
@@ -42,6 +49,54 @@ namespace FhirStarter.UnitTests.Validation
 
             }
             Assert.IsNotNull(patient);
+
+            var validResource = _validator.Validate(xDocument.CreateReader(), true);
+            Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
+        }
+
+        [TestCase("DiagnosticReport.xml")]
+        public void TestValidateDiagnosticReport(string xmlResource)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var names = assembly.GetManifestResourceNames();
+            DiagnosticReport diagnosticReport = null;
+            var item = names.FirstOrDefault(t => t.EndsWith(xmlResource));
+            XDocument xDocument = null;
+            if (item != null)
+            {
+
+                using (var stream = assembly.GetManifestResourceStream(item))
+                {
+                    xDocument = XDocument.Load(stream);
+                }
+                diagnosticReport = new FhirXmlParser().Parse<DiagnosticReport>(xDocument.ToString());
+
+            }
+            Assert.IsNotNull(diagnosticReport);
+
+            var validResource = _validator.Validate(xDocument.CreateReader(), true);
+            Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
+        }
+
+        [TestCase("MedicationStatement.xml")]
+        public void TestValidateMedicationStatement(string xmlResource)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var names = assembly.GetManifestResourceNames();
+            MedicationStatement medicationStatement = null;
+            var item = names.FirstOrDefault(t => t.EndsWith(xmlResource));
+            XDocument xDocument = null;
+            if (item != null)
+            {
+
+                using (var stream = assembly.GetManifestResourceStream(item))
+                {
+                    xDocument = XDocument.Load(stream);
+                }
+                medicationStatement = new FhirXmlParser().Parse<MedicationStatement>(xDocument.ToString());
+
+            }
+            Assert.IsNotNull(medicationStatement);
 
             var validResource = _validator.Validate(xDocument.CreateReader(), true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));

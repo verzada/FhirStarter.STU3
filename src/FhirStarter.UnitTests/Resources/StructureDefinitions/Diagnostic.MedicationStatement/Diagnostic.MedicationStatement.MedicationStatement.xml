@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <lastUpdated value="2017-05-23T14:25:37.546+02:00" />
+  </meta>
+  <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
+    <valueCode value="phx" />
+  </extension>
+  <url value="http://helse-nord.no/FHIR/profiles/Diagnostics.MedicationStatement/MedicationStatement" />
+  <name value="MedicationStatement" />
+  <status value="draft" />
+  <date value="2017-05-22T14:47:17.0002291+02:00" />
+  <fhirVersion value="3.0.0" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="MedicationStatement" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/MedicationStatement" />
+  <derivation value="constraint" />
+  <differential>
+    <element>
+      <path value="MedicationStatement.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+    </element>
+    <element>
+      <path value="MedicationStatement.extension" />
+      <sliceName value="drugUse" />
+      <short value="Optional Extensions Element" />
+      <definition value="Optional Extension Element - found in all resources." />
+      <min value="0" />
+      <max value="1" />
+      <type>
+        <code value="Extension" />
+        <profile value="http://helse-nord.no/FHIR/profiles/Extension.MedicationStatementDrugUse" />
+      </type>
+    </element>
+    <element>
+      <path value="MedicationStatement.identifier" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="system" />
+        </discriminator>
+        <rules value="openAtEnd" />
+      </slicing>
+    </element>
+    <element id="MedicationStatement.identifier:DIPS identifier">
+      <path value="MedicationStatement.identifier" />
+      <sliceName value="DIPS identifier" />
+      <max value="1" />
+    </element>
+    <element>
+      <path value="MedicationStatement.basedOn" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.partOf" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.context" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.category" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.medication[x]" />
+      <type>
+        <code value="CodeableConcept" />
+      </type>
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Medication" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element>
+      <path value="MedicationStatement.subject" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Patient" />
+      </type>
+    </element>
+    <element>
+      <path value="MedicationStatement.reasonCode" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.reasonReference" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Condition" />
+      </type>
+    </element>
+    <element>
+      <path value="MedicationStatement.dosage.sequence" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.dosage.additionalInstruction" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.dosage.patientInstruction" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.dosage.maxDosePerAdministration" />
+      <sliceName value="SimpleQuantity" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="MedicationStatement.dosage.maxDosePerLifetime" />
+      <sliceName value="SimpleQuantity" />
+      <max value="0" />
+    </element>
+  </differential>
+</StructureDefinition>

@@ -115,7 +115,7 @@ namespace FhirStarter.Inferno.Services
 
             return new Patient
             {
-                Meta = new Meta { LastUpdated = date.ToDateTimeOffset()},
+                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(), Profile = new List<string> { "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" } },
                 Id = "12345678901",
                 Active = true,
                 Name =

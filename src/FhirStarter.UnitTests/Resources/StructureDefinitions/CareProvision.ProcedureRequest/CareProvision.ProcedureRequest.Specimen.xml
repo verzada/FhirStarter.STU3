@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <lastUpdated value="2017-06-07T12:18:50.09+02:00" />
+  </meta>
+  <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
+    <valueCode value="oo" />
+  </extension>
+  <url value="http://helse-nord.no/FHIR/profiles/CareProvision.ProcedureRequest/Specimen" />
+  <name value="Specimen" />
+  <status value="draft" />
+  <date value="2017-05-12T12:35:11.2114655+02:00" />
+  <fhirVersion value="3.0.0" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="Specimen" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Specimen" />
+  <derivation value="constraint" />
+  <differential>
+    <element>
+      <path value="Specimen" />
+      <short value="DIPS: represents a contained analyzed subject DIPSDiagnosticOrder" />
+    </element>
+    <element>
+      <path value="Specimen.identifier" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.accessionIdentifier" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.status" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.type" />
+      <short value="DIPS: material specified on the analysis code" />
+      <min value="1" />
+      <binding>
+        <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName">
+          <valueString value="SpecimenType" />
+        </extension>
+        <strength value="example" />
+        <valueSetUri value="http://hl7.org/fhir/ValueSet/v2-0487" />
+      </binding>
+    </element>
+    <element>
+      <path value="Specimen.type.coding" />
+      <short value="DIPS: Code is currently always empty" />
+      <max value="1" />
+    </element>
+    <element>
+      <path value="Specimen.type.coding.system" />
+      <fixedUri value="http://dips.no/fhir/specimen/type-codes" />
+    </element>
+    <element>
+      <path value="Specimen.type.coding.version" />
+      <max value="0" />
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable">
+        <valueBoolean value="true" />
+      </extension>
+      <path value="Specimen.type.coding.display" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.type.coding.userSelected" />
+      <max value="0" />
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable">
+        <valueBoolean value="true" />
+      </extension>
+      <path value="Specimen.type.text" />
+      <short value="DIPS: name of material" />
+    </element>
+    <element>
+      <path value="Specimen.subject" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Patient" />
+        <aggregation value="referenced" />
+        <aggregation value="bundled" />
+      </type>
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Group" />
+      </type>
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Device" />
+      </type>
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Substance" />
+      </type>
+    </element>
+    <element>
+      <path value="Specimen.subject.identifier" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.receivedTime" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.parent" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.request" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.collection" />
+      <short value="DIPS: angir hvor på pasienten prøve er tatt i bodySite" />
+    </element>
+    <element>
+      <path value="Specimen.collection.collector" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.collection.collected[x]" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.collection.quantity" />
+      <sliceName value="SimpleQuantity" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.collection.method" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.collection.bodySite" />
+      <min value="1" />
+    </element>
+    <element>
+      <path value="Specimen.collection.bodySite.coding" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.collection.bodySite.coding.system" />
+      <fixedUri value="x.x.x.x" />
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable">
+        <valueBoolean value="true" />
+      </extension>
+      <path value="Specimen.collection.bodySite.text" />
+      <short value="DIPS: &quot;&lt;AnatomicalOrigin&gt;&quot; if specified, otherwise &quot;&lt;Location&gt;/&lt;Position&gt;&quot;" />
+      <min value="1" />
+    </element>
+    <element>
+      <path value="Specimen.processing" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.container" />
+      <max value="0" />
+    </element>
+    <element>
+      <path value="Specimen.note" />
+      <max value="0" />
+    </element>
+  </differential>
+</StructureDefinition>
