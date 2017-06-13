@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StructureDefinition xmlns="http://hl7.org/fhir">
   <meta>
-    <lastUpdated value="2017-05-23T14:25:37.546+02:00" />
+    <lastUpdated value="2017-06-13T13:42:00.835+02:00" />
   </meta>
   <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
     <valueCode value="phx" />
@@ -27,12 +27,9 @@
         <rules value="open" />
       </slicing>
     </element>
-    <element>
+    <element id="http://helse-nord.no/FHIR/profiles/Extension.MedicationStatementDrugUse">
       <path value="MedicationStatement.extension" />
-      <sliceName value="drugUse" />
-      <short value="Optional Extensions Element" />
-      <definition value="Optional Extension Element - found in all resources." />
-      <min value="0" />
+      <sliceName value="MedicationStatementDrugUse" />
       <max value="1" />
       <type>
         <code value="Extension" />
