@@ -79,11 +79,11 @@
     <EmbeddedResource Include="Resources\Patient\ValidPatient.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\StructureDefinitions\Entities.Organization\Entities.Organization.Organization.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="Resources\Medication\MedicationStatement.xml" />
     <EmbeddedResource Include="Resources\DiagnosticsReport\DiagnosticReport.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Medication\BundleWithMedicationStatement.xml" />
     <Content Include="Resources\StructureDefinitions\CareProvision.ProcedureRequest\CareProvision.ProcedureRequest.Practitioner.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -105,10 +105,13 @@
     <Content Include="Resources\StructureDefinitions\Diagnostics.DiagnosticReport\Diagnostics.DiagnosticReport.DiagnosticReport.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\StructureDefinitions\Diagnostics.DiagnosticReport\Diagnostics.DiagnosticReport.Organization.xml">
+    <Content Include="Resources\StructureDefinitions\Diagnostics.LabObservation\Diagnostics.LabObservation..xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\StructureDefinitions\Diagnostics.LabObservation\Diagnostics.LabObservation..xml">
+    <Content Include="Resources\StructureDefinitions\Entities.Organization\Entities.Organization.Organization.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\StructureDefinitions\Individuals.Patient\Individuals.Patient.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

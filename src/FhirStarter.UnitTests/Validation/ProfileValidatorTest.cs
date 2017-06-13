@@ -101,5 +101,30 @@ namespace FhirStarter.UnitTests.Validation
             var validResource = _validator.Validate(xDocument.CreateReader(), true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
+
+        [TestCase("BundleWithMedicationStatement.xml")]
+        public void TestValidateBundleMedicationStatement(string xmlResource)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var names = assembly.GetManifestResourceNames();
+            Bundle bundle = null;
+            var item = names.FirstOrDefault(t => t.EndsWith(xmlResource));
+            XDocument xDocument = null;
+            if (item != null)
+            {
+
+                using (var stream = assembly.GetManifestResourceStream(item))
+                {
+                    xDocument = XDocument.Load(stream);
+                }
+                bundle = new FhirXmlParser().Parse<Bundle>(xDocument.ToString());
+
+            }
+            Assert.IsNotNull(bundle);
+
+            var validResource = _validator.Validate(xDocument.CreateReader(), true);
+            Console.WriteLine(XDocument.Parse(FhirSerializer.SerializeToXml(validResource)).ToString());
+            Assert.AreEqual(0, validResource.Issue.Count, "Should not get an operation outcome");
+        }
     }
 }
