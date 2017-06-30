@@ -188,6 +188,7 @@
     <Content Include="Profile\Identification.Patient.Patient.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Resources\ExampleServiceRest.xml" />
     <Content Include="Resources\StructureDefinitions\Identification.Patient.Patient.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

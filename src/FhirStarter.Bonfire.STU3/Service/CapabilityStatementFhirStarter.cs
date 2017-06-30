@@ -62,8 +62,9 @@ namespace FhirStarter.Bonfire.STU3.Service
                         var resourceService = service;
                         if (resourceService != null)
                         {
-                            capabilityStatement.Rest().Resource.Remove(r);
-                            capabilityStatement.Rest().Resource.Add(AddCoreSearchParamsResource(r, resourceService.SearchParameters()));
+                            //capabilityStatement.Rest().Resource.Remove(r);                            
+                            //capabilityStatement.Rest().Resource.Add(resourceService.CreateResource());
+                            capabilityStatement.Rest.Add(resourceService.GetRestDefinition());
                         }
                     }
                 }

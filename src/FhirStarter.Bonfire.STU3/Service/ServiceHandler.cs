@@ -57,6 +57,14 @@ namespace FhirStarter.Bonfire.STU3.Service
             throw new ArgumentException("Service is null, cannot update resource of type " + type);
         }
 
+        public HttpResponseMessage ResourcePatch(string type, IKey key, Resource resource, IFhirService service)
+        {
+            if (service != null)
+            {
+                return service.Patch(key, resource);
+            }
+            throw new ArgumentException("Service is null, cannot update resource of type " + type);
+        }
 
         public IFhirService FindServiceFromList(ICollection<IFhirService> services, string type)
         {
@@ -143,6 +151,8 @@ namespace FhirStarter.Bonfire.STU3.Service
             }
             return serviceName;
         }
+
+     
     }
 }
 

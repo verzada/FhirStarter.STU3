@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ExamplePatientServiceUnitTest.cs" />
     <Compile Include="Validation\ProfileValidatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +75,6 @@
       <Project>{8b1d06ce-6a59-4012-bd7a-ab799fbf0df2}</Project>
       <Name>FHIRStarter.Inferno</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Patient\ValidPatient.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Medication\MedicationStatement.xml" />
@@ -114,6 +112,9 @@
     <Content Include="Resources\StructureDefinitions\Individuals.Patient\Individuals.Patient.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Patient\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

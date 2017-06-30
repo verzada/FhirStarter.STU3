@@ -19,7 +19,9 @@ namespace FhirStarter.Bonfire.STU3.Interface
         string GetServiceResourceReference();
 
         // Define conformance
-        List<ModelInfo.SearchParamDefinition> SearchParameters();
+        //List<ModelInfo.SearchParamDefinition> SearchParameters();
+
+        CapabilityStatement.RestComponent GetRestDefinition();
 
         OperationDefinition GetOperationDefinition();
 
@@ -29,5 +31,7 @@ namespace FhirStarter.Bonfire.STU3.Interface
         Base Read(string id);
         HttpResponseMessage Update(IKey key, Resource resource);
         HttpResponseMessage Delete(IKey key);
+
+        HttpResponseMessage Patch(IKey key, Resource resource);
     }
 }
