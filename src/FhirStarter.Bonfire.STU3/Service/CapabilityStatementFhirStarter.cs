@@ -13,20 +13,20 @@ namespace FhirStarter.Bonfire.STU3.Service
     IEnumerable<IFhirService> services, bool readhistory, bool updatecreate,
     CapabilityStatement.ResourceVersionPolicy versioning)
         {
-            var totalAvailableResources = new List<string>();
-            foreach (var service in services)
-            {
-                var resourcesService = service;
-                if (resourcesService != null)
-                {
-                    totalAvailableResources.AddRange(resourcesService.GetSupportedResources());
-                }
-            }
+         //   var totalAvailableResources = new List<string>();
+            //foreach (var service in services)
+            //{
+            //    var resourcesService = service;
+            //    if (resourcesService != null)
+            //    {
+            //        totalAvailableResources.AddRange(resourcesService.GetSupportedResources());
+            //    }
+            //}
 
-            foreach (var resource in totalAvailableResources)
-            {
-                capabilityStatement.AddSingleResourceComponent(resource, readhistory, updatecreate, versioning);
-            }
+            //foreach (var resource in totalAvailableResources)
+            //{
+            //    capabilityStatement.AddSingleResourceComponent(resource, readhistory, updatecreate, versioning);
+            //}
             return capabilityStatement;
         }
 
@@ -50,24 +50,18 @@ namespace FhirStarter.Bonfire.STU3.Service
         }
 
         public static CapabilityStatement AddCoreSearchParamsAllResources(this CapabilityStatement capabilityStatement,
-          IEnumerable<IFhirService> services)
+            IEnumerable<IFhirService> services)
         {
             var fhirStarterServices = services as IFhirService[] ?? services.ToArray();
-            var firstOrDefault = capabilityStatement.Rest.FirstOrDefault();
-            if (firstOrDefault != null)
-                foreach (var r in firstOrDefault.Resource.ToList())
+
+            foreach (var service in fhirStarterServices)
+            {
+                var resourceService = service;
+                if (resourceService != null)
                 {
-                    foreach (var service in fhirStarterServices)
-                    {
-                        var resourceService = service;
-                        if (resourceService != null)
-                        {
-                            //capabilityStatement.Rest().Resource.Remove(r);                            
-                            //capabilityStatement.Rest().Resource.Add(resourceService.CreateResource());
-                            capabilityStatement.Rest.Add(resourceService.GetRestDefinition());
-                        }
-                    }
+                    capabilityStatement.Rest.Add(resourceService.GetRestDefinition());
                 }
+            }
             return capabilityStatement;
         }
 

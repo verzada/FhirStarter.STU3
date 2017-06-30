@@ -98,10 +98,11 @@ namespace FhirStarter.Bonfire.STU3.Service
 
                 var conformance = CapabilityStatementBuilder.CreateServer(serviceName, fhirPublisher, fhirVersion);
 
-                conformance.AddUsedResources(services, false, false,
-                    CapabilityStatement.ResourceVersionPolicy.VersionedUpdate);
+                //conformance.AddUsedResources(services, false, false,
+                //  CapabilityStatement.ResourceVersionPolicy.VersionedUpdate);
 
-                conformance.AddSearchSetInteraction().AddSearchTypeInteractionForResources();
+                //conformance.AddSearchSetInteraction().AddSearchTypeInteractionForResources();
+                conformance.AddSearchTypeInteractionForResources();
                 conformance = conformance.AddCoreSearchParamsAllResources(services);
                 conformance = conformance.AddOperationDefintion(services);
 
