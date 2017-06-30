@@ -102,6 +102,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             var service = _handler.FindServiceFromList(_fhirServices, type);
             return _handler.ResourcePatch(type, Key.Create(type, id), resource, service);
         }
+
         private HttpResponseMessage SendResponse(Base resource)
         {
            
