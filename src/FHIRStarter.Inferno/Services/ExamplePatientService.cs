@@ -16,10 +16,10 @@ namespace FhirStarter.Inferno.Services
 {
     public class ExamplePatientService : IFhirService
     {
-
+        //Edit
         public ExamplePatientService()
         {
-            
+            int i = 0;
         }
 
         public string GetServiceResourceReference()
