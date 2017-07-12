@@ -26,7 +26,7 @@ namespace FhirStarter.Flare.STU3.Controllers
     {
         private readonly ICollection<IFhirService> _fhirServices;
         private readonly ServiceHandler _handler = new ServiceHandler();
-        private readonly ProfileValidator _profileValidator = null;
+        private readonly ProfileValidator _profileValidator;
 
         public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator)
         {

@@ -1,8 +1,5 @@
 ﻿using Hl7.Fhir.Validation;
-using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Xml;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Specification.Source;
