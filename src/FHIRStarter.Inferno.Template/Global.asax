@@ -1,1 +1,1 @@
-﻿<%@ Application Inherits="FhirStarter.Flare.WebApiApplication" Language="C#" %>
+﻿<%@ Application Inherits="FhirStarter.Flare.STU3.WebApiApplication" Language="C#" %>

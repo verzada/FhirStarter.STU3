@@ -24,6 +24,11 @@ namespace FhirStarter.Inferno.Services
             return nameof(Patient);
         }
 
+        public CapabilityStatement.RestComponent GetRestDefinition()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<string> GetSupportedResources()
         {
             return new List<string> {nameof(Patient)};
@@ -162,6 +167,9 @@ namespace FhirStarter.Inferno.Services
             throw new System.NotImplementedException();
         }
 
-       
+        public HttpResponseMessage Patch(IKey key, Resource resource)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
