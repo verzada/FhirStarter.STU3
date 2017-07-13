@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Web;
+using System.Xml.Linq;
 using FhirStarter.Bonfire.STU3.Helper;
 using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Parameter;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
+using Hl7.Fhir.Serialization;
 using Spark.Engine.Core;
 
 namespace FhirStarter.Inferno.Services
@@ -26,7 +30,21 @@ namespace FhirStarter.Inferno.Services
 
         public CapabilityStatement.RestComponent GetRestDefinition()
         {
-            throw new NotImplementedException();
+            var assembly = Assembly.GetExecutingAssembly();
+            var names = assembly.GetManifestResourceNames();
+            foreach (var name in names)
+            {
+                if (!name.EndsWith("ExampleServiceRest.xml")) continue;
+                using (var stream = assembly.GetManifestResourceStream(name))
+                {
+                    var xDocument = XDocument.Load(stream);
+                    var parser = new FhirXmlParser();
+                    var item =
+                        parser.Parse<CapabilityStatement>(xDocument.ToString());
+                    return item.Rest[0];
+                }
+            }
+            throw new InvalidDataException("Metadata information has not been added");
         }
 
         public List<string> GetSupportedResources()

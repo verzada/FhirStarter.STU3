@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using FhirStarter.Bonfire.STU3.Helper;
 using FhirStarter.Bonfire.STU3.Interface;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
@@ -69,7 +71,66 @@ namespace FhirStarter.Inferno.Services
      
         public OperationDefinition GetOperationDefinition()
         {
-            return new OperationDefinition();
+            var defintion = new OperationDefinition
+            {
+                Url = UrlHandler.GetUrlForOperationDefinition(HttpContext.Current, "fhir/", nameof(Patient)),
+                Name = GetServiceResourceReference(),
+                Status = PublicationStatus.Active,
+                Kind = OperationDefinition.OperationKind.Query,
+                Experimental = false,
+                Code = GetServiceResourceReference(),
+                Description = new Markdown("Search parameters for the test query service"),
+                System = true,
+                Instance = false,
+                Parameter =
+                    new List<OperationDefinition.ParameterComponent>
+                    {
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Name",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Name:contains",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Name:exact",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Identifier",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1",
+                            Documentation = "Query against the following: REKVIRENTKODE, HPNR or HER-ID"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "_lastupdated",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "2",
+                            Documentation =
+                                "Equals" + " -- Note that the date format is yyyy-MM-ddTHH:mm:ss --"
+                        }
+                    }
+            };
+            return defintion;
         }
 
        
