@@ -20,16 +20,24 @@ namespace FhirStarter.Bonfire.STU3.Filter
         {
             var exceptionType = context.Exception.GetType();
             var expectedType = GetExceptionType();
+            var exceptionMessage = context.Exception.Message;
+
             if (exceptionType != expectedType && !(expectedType == typeof(Exception))) return;
-            var outCome = GetOperationOutCome(context.Exception);
+
+            Resource operationOutcome = null;
+            if (exceptionMessage.Contains("<" + nameof(OperationOutcome)))
+            {
+                var serializer = new FhirXmlParser();
+                operationOutcome = serializer.Parse<OperationOutcome>(exceptionMessage);
+            }
+            var outCome = operationOutcome ?? GetOperationOutCome(context.Exception);
 
             var xml = FhirSerializer.SerializeResourceToXml(outCome);
             var xmlDoc = XDocument.Parse(xml);
             var error = xmlDoc.ToString();
-            
-            Log.Error(error);
+            var htmlDecode = WebUtility.HtmlDecode(error);
+            Log.Error(htmlDecode);
             SetResponseForClient(context, outCome);
-
         }
 
         private static void SetResponseForClient(HttpActionExecutedContext context, Resource outCome)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Web;
@@ -169,8 +170,32 @@ namespace FhirStarter.Inferno.Services
 
         public Base Read(SearchParams searchParams)
         {
-            throw new ArgumentException("Using " + nameof(SearchParams) +
-                                        " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
+            var parameters = searchParams.Parameters;
+
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Item1.ToLower().Contains("log") && parameter.Item2.ToLower().Contains("normal"))
+                {
+                    throw new ArgumentException("Using " + nameof(SearchParams) +
+                                                " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
+                }
+                if (parameter.Item1.Contains("log") && parameter.Item2.Contains("operationoutcome"))
+                {
+                    var operationOutcome = new OperationOutcome{Issue = new List<OperationOutcome.IssueComponent>()};
+                    var issue = new OperationOutcome.IssueComponent
+                    {
+                        Severity = OperationOutcome.IssueSeverity.Information,
+                        Code = OperationOutcome.IssueType.Incomplete,
+                        Details = new CodeableConcept("SomeExampleException", typeof(FhirOperationException).ToString(),
+                            "Something expected happened and is handled with more detail.")
+                    };
+                    operationOutcome.Issue.Add(issue);
+                    //var errorMessage = fh
+                    var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
+                    throw new ArgumentException(serialized);
+                }
+            }
+            throw new ArgumentException("Generic error");
         }
 
         public Base Read(string id)
