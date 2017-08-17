@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Web;
@@ -9,7 +10,6 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using FhirStarter.Bonfire.STU3.Helper;
 using FhirStarter.Bonfire.STU3.Interface;
-using FhirStarter.Bonfire.STU3.Parameter;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
@@ -19,10 +19,10 @@ namespace FhirStarter.Inferno.Services
 {
     public class ExamplePatientService : IFhirService
     {
-
+        //Edit
         public ExamplePatientService()
         {
-            
+            int i = 0;
         }
 
         public string GetServiceResourceReference()
@@ -72,7 +72,66 @@ namespace FhirStarter.Inferno.Services
      
         public OperationDefinition GetOperationDefinition()
         {
-            return new OperationDefinition();
+            var defintion = new OperationDefinition
+            {
+                Url = UrlHandler.GetUrlForOperationDefinition(HttpContext.Current, "fhir/", nameof(Patient)),
+                Name = GetServiceResourceReference(),
+                Status = PublicationStatus.Active,
+                Kind = OperationDefinition.OperationKind.Query,
+                Experimental = false,
+                Code = GetServiceResourceReference(),
+                Description = new Markdown("Search parameters for the test query service"),
+                System = true,
+                Instance = false,
+                Parameter =
+                    new List<OperationDefinition.ParameterComponent>
+                    {
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Name",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Name:contains",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Name:exact",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "Identifier",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "1",
+                            Documentation = "Query against the following: REKVIRENTKODE, HPNR or HER-ID"
+                        },
+                        new OperationDefinition.ParameterComponent
+                        {
+                            Name = "_lastupdated",
+                            Use = OperationParameterUse.In,
+                            Type = FHIRAllTypes.String,
+                            Min = 0,
+                            Max = "2",
+                            Documentation =
+                                "Equals" + " -- Note that the date format is yyyy-MM-ddTHH:mm:ss --"
+                        }
+                    }
+            };
+            return defintion;
         }
 
        
@@ -111,8 +170,32 @@ namespace FhirStarter.Inferno.Services
 
         public Base Read(SearchParams searchParams)
         {
-            throw new ArgumentException("Using " + nameof(SearchParams) +
-                                        " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
+            var parameters = searchParams.Parameters;
+
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Item1.ToLower().Contains("log") && parameter.Item2.ToLower().Contains("normal"))
+                {
+                    throw new ArgumentException("Using " + nameof(SearchParams) +
+                                                " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
+                }
+                if (parameter.Item1.Contains("log") && parameter.Item2.Contains("operationoutcome"))
+                {
+                    var operationOutcome = new OperationOutcome{Issue = new List<OperationOutcome.IssueComponent>()};
+                    var issue = new OperationOutcome.IssueComponent
+                    {
+                        Severity = OperationOutcome.IssueSeverity.Information,
+                        Code = OperationOutcome.IssueType.Incomplete,
+                        Details = new CodeableConcept("SomeExampleException", typeof(FhirOperationException).ToString(),
+                            "Something expected happened and is handled with more detail.")
+                    };
+                    operationOutcome.Issue.Add(issue);
+                    //var errorMessage = fh
+                    var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
+                    throw new ArgumentException(serialized);
+                }
+            }
+            throw new ArgumentException("Generic error");
         }
 
         public Base Read(string id)

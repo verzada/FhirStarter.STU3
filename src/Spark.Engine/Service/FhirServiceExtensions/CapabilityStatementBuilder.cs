@@ -22,7 +22,7 @@ namespace Spark.Engine.Service.FhirServiceExtensions
                 AcceptUnknown = CapabilityStatement.UnknownContentCode.No,
                 Date = Date.Today().Value
             };
-            capabilityStatement.AddServer();
+          //  capabilityStatement.AddServer();
             return capabilityStatement;
         }
 

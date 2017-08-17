@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Spark.Engine.Core;
@@ -12,14 +11,9 @@ namespace FhirStarter.Bonfire.STU3.Interface
     /// </summary>
     public interface IFhirService
     {
-        // List the supported resource f.ex. Patient, Bundle etc
-        List<string> GetSupportedResources();
 
         // The name of the Resource you can query (earlier called GetAlias)
         string GetServiceResourceReference();
-
-        // Define conformance
-        //List<ModelInfo.SearchParamDefinition> SearchParameters();
 
         CapabilityStatement.RestComponent GetRestDefinition();
 

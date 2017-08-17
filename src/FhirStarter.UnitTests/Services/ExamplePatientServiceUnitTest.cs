@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FhirStarter.Inferno.Services;
+﻿using FhirStarter.Inferno.Services;
 using NUnit.Framework;
 
 namespace FhirStarter.UnitTests.Services

@@ -30,7 +30,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         private readonly ICollection<IFhirService> _fhirServices;
         private readonly IFhirStructureDefinitionService _fhirStructureDefinitionService;
         private readonly ServiceHandler _handler = new ServiceHandler();
-        private readonly ProfileValidator _profileValidator = null;
+        private readonly ProfileValidator _profileValidator;
 
         public FhirController(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService, ProfileValidator profileValidator)
         {
@@ -128,6 +128,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             var service = _handler.FindServiceFromList(_fhirServices, type);
             return _handler.ResourcePatch(type, Key.Create(type, id), resource, service);
         }
+
         private HttpResponseMessage SendResponse(Base resource)
         {
            
