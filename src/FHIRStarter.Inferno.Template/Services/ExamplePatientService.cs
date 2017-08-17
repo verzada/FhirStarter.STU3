@@ -7,7 +7,6 @@ using System.Web;
 using System.Xml.Linq;
 using FhirStarter.Bonfire.STU3.Helper;
 using FhirStarter.Bonfire.STU3.Interface;
-using FhirStarter.Bonfire.STU3.Parameter;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
@@ -17,12 +16,6 @@ namespace FhirStarter.Inferno.Services
 {
     public class ExamplePatientService : IFhirService
     {
-
-        public ExamplePatientService()
-        {
-            
-        }
-
         public string GetServiceResourceReference()
         {
             return nameof(Patient);
@@ -45,25 +38,6 @@ namespace FhirStarter.Inferno.Services
                 }
             }
             throw new InvalidDataException("Metadata information has not been added");
-        }
-
-        public List<string> GetSupportedResources()
-        {
-            return new List<string> {nameof(Patient)};
-        }
-
-       public List<ModelInfo.SearchParamDefinition> SearchParameters()
-        {
-            return new List<ModelInfo.SearchParamDefinition>
-            {
-                new ModelInfo.SearchParamDefinition
-                {
-                    Resource = nameof(Patient),
-                    Type = SearchParamType.Number,
-                    Name = CommonParameters.ParameterIdentifier,
-                    Description = "The patient social security number"
-                }
-            };
         }
 
         public OperationDefinition GetOperationDefinition()
@@ -161,7 +135,7 @@ namespace FhirStarter.Inferno.Services
 
         public HttpResponseMessage Create(IKey key, Resource resource)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Base Read(SearchParams searchParams)
@@ -177,12 +151,12 @@ namespace FhirStarter.Inferno.Services
 
         public HttpResponseMessage Update(IKey key, Resource resource)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public HttpResponseMessage Delete(IKey key)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public HttpResponseMessage Patch(IKey key, Resource resource)

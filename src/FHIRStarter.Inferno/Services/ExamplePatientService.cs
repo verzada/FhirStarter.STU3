@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Web;
@@ -22,7 +21,9 @@ namespace FhirStarter.Inferno.Services
         //Edit
         public ExamplePatientService()
         {
+#pragma warning disable 219
             int i = 0;
+#pragma warning restore 219
         }
 
         public string GetServiceResourceReference()
@@ -61,15 +62,7 @@ namespace FhirStarter.Inferno.Services
             return result;
         }
 
-       
 
-
-        public List<string> GetSupportedResources()
-        {
-            return new List<string> {nameof(Patient)};
-        }
-
-     
         public OperationDefinition GetOperationDefinition()
         {
             var defintion = new OperationDefinition
@@ -165,7 +158,7 @@ namespace FhirStarter.Inferno.Services
 
         public HttpResponseMessage Create(IKey key, Resource resource)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Base Read(SearchParams searchParams)
@@ -205,12 +198,12 @@ namespace FhirStarter.Inferno.Services
 
         public HttpResponseMessage Update(IKey key, Resource resource)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public HttpResponseMessage Delete(IKey key)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public HttpResponseMessage Patch(IKey key, Resource resource)
