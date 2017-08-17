@@ -35,6 +35,21 @@ namespace FhirStarter.Bonfire.STU3.Service
             return new HttpResponseMessage(HttpStatusCode.Ambiguous);
         }
 
+        public ICollection<string> GetStructureDefinitionNames(ICollection<IFhirService> services)
+        {
+            var list = new List<string>();
+            foreach (var service in services)
+            {
+                foreach (var name in service.GetStructureDefinitionNames())
+                {
+                    if (!list.Contains(name))
+                    {
+                        list.Add(name);
+                    }
+                }
+            }
+            return list;
+        }
         public HttpResponseMessage ResourceUpdate(string type, string id, Resource resource, IFhirService service)
         {
             if (service != null && !string.IsNullOrEmpty(type) && resource != null && !string.IsNullOrEmpty(id))

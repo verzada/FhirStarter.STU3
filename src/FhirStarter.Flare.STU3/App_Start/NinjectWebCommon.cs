@@ -9,6 +9,7 @@ using FhirStarter.Bonfire.STU3.Validation;
 using FhirStarter.Flare.STU3;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
+using Ninject.Syntax;
 using Ninject.Web.Common;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -71,12 +72,13 @@ namespace FhirStarter.Flare.STU3
             try
             {
                 var fhirService = typeof(IFhirService);
+                var fhirStructureDefinition = typeof(IFhirStructureDefinitionService);
 
                 foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     foreach (Type classType in asm.GetTypes())
                     {
-                        BindIFhirServices(kernel, fhirService, classType);
+                        BindIFhirServices(kernel, fhirService, fhirStructureDefinition, classType);                        
                     }
                 }
                 BindProfileValidator(kernel);
@@ -88,7 +90,7 @@ namespace FhirStarter.Flare.STU3
 
         }
 
-        private static void BindProfileValidator(IKernel kernel)
+        private static void BindProfileValidator(IBindingRoot kernel)
         {
             var setting = ConfigurationManager.AppSettings["EnableValidation"];
 
@@ -102,13 +104,20 @@ namespace FhirStarter.Flare.STU3
             }
         }
 
-        private static void BindIFhirServices(IKernel kernel, Type fhirService, Type classType)
+        private static void BindIFhirServices(IBindingRoot kernel, Type fhirService, Type fhidStructureDefinition, Type classType)
         {
-            if (fhirService.IsAssignableFrom(classType) && !classType.IsInterface && !classType.IsAbstract)
+            if ((!fhirService.IsAssignableFrom(classType) && !fhidStructureDefinition.IsAssignableFrom(classType)) ||
+                classType.IsInterface || classType.IsAbstract) return;
+            if (fhirService.IsAssignableFrom(classType))
             {
                 var instance = (IFhirService) Activator.CreateInstance(classType);
                 kernel.Bind<IFhirService>().ToConstant(instance);
             }
+            else
+            {
+                var instance = (IFhirStructureDefinitionService)Activator.CreateInstance(classType);
+                kernel.Bind<IFhirStructureDefinitionService>().ToConstant(instance);
+            }
         }
-    }
+        }    
 }

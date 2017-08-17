@@ -134,5 +134,10 @@ namespace FhirStarter.Inferno.Services
         {
             throw new NotImplementedException();
         }
+
+        public ICollection<string> GetStructureDefinitionNames()
+        {
+            return new List<string> { GetServiceResourceReference() };
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace FhirStarter.Bonfire.STU3.Interface
 
         OperationDefinition GetOperationDefinition();
 
+       
         // CRUD
         HttpResponseMessage Create(IKey key, Resource resource);
         Base Read(SearchParams searchParams);
@@ -33,5 +34,7 @@ namespace FhirStarter.Bonfire.STU3.Interface
         HttpResponseMessage Delete(IKey key);
 
         HttpResponseMessage Patch(IKey key, Resource resource);
+
+        ICollection<string> GetStructureDefinitionNames();
     }
 }

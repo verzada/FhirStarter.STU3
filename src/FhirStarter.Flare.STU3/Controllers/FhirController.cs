@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -12,6 +14,7 @@ using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Service;
 using FhirStarter.Bonfire.STU3.Validation;
 using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Spark.Engine.Core;
 using Spark.Engine.Extensions;
@@ -25,20 +28,42 @@ namespace FhirStarter.Flare.STU3.Controllers
     public class FhirController : ApiController
     {
         private readonly ICollection<IFhirService> _fhirServices;
+        private readonly IFhirStructureDefinitionService _fhirStructureDefinitionService;
         private readonly ServiceHandler _handler = new ServiceHandler();
         private readonly ProfileValidator _profileValidator = null;
 
-        public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator)
+        public FhirController(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService, ProfileValidator profileValidator)
         {
             _fhirServices = services;
             _profileValidator = profileValidator;
         }
 
-        public FhirController(ICollection<IFhirService> services)
+        public FhirController(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService)
         {
             _fhirServices = services;
-
+            _fhirStructureDefinitionService = fhirStructureDefinitionService;
         }
+
+        [HttpGet, Route("StructureDefinition/{id}")]
+        public HttpResponseMessage GetStructureDefinition(string id)
+        {
+            var structureDefinitionNames = _handler.GetStructureDefinitionNames(_fhirServices);
+            if (!structureDefinitionNames.Contains(id))
+            {
+                throw new FhirOperationException($"{nameof(StructureDefinition)} {id} not found", HttpStatusCode.InternalServerError);
+            }
+            var structureDefinitions = _fhirStructureDefinitionService.GetStructureDefinitions();
+            var structureDefinition = structureDefinitions.FirstOrDefault(definition => definition.Name.Equals(id));
+            if (structureDefinition != null)
+            {
+                return SendResponse(structureDefinition);
+            }
+            throw new FhirOperationException($"{nameof(StructureDefinition)} for {id} not found", HttpStatusCode.InternalServerError);
+            
+        }
+
+        
+
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
         public HttpResponseMessage Read(string type, string id)
         {
@@ -54,6 +79,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             return SendResponse(result);
         }
 
+       
         [HttpGet, Route("{type}")]
         public HttpResponseMessage Read(string type)
         {

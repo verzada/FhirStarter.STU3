@@ -199,6 +199,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ExamplePatientService.cs" />
+    <Compile Include="Structures\FhirStructureDefinitionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
