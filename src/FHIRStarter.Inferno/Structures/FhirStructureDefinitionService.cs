@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
