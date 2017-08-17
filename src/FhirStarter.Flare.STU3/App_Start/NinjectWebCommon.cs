@@ -19,6 +19,8 @@ namespace FhirStarter.Flare.STU3
 {
     public static class NinjectWebCommon
     {
+        private static int Count1 = 0;
+        private static int Count2 = 0;
         // ReSharper disable once InconsistentNaming
         private static readonly Bootstrapper _bootstrapper = new Bootstrapper();
 
@@ -87,7 +89,10 @@ namespace FhirStarter.Flare.STU3
             {
                 ExceptionLogger.LogReflectionTypeLoadException(ex);
             }
-
+            if (Count1 == 0 || Count2 == 0)
+            {
+                throw new Exception("Missing some implementations");
+            }
         }
 
         private static void BindProfileValidator(IBindingRoot kernel)
@@ -110,11 +115,13 @@ namespace FhirStarter.Flare.STU3
                 classType.IsInterface || classType.IsAbstract) return;
             if (fhirService.IsAssignableFrom(classType))
             {
+                Count1++;
                 var instance = (IFhirService) Activator.CreateInstance(classType);
                 kernel.Bind<IFhirService>().ToConstant(instance);
             }
             else
             {
+                Count2++;
                 var instance = (IFhirStructureDefinitionService)Activator.CreateInstance(classType);
                 kernel.Bind<IFhirStructureDefinitionService>().ToConstant(instance);
             }

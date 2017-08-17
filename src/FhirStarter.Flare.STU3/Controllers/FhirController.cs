@@ -32,16 +32,22 @@ namespace FhirStarter.Flare.STU3.Controllers
         private readonly ServiceHandler _handler = new ServiceHandler();
         private readonly ProfileValidator _profileValidator;
 
-        public FhirController(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService, ProfileValidator profileValidator)
+        public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator, IFhirStructureDefinitionService fhirStructureDefinitionService)
         {
             _fhirServices = services;
             _profileValidator = profileValidator;
+            _fhirStructureDefinitionService = fhirStructureDefinitionService;
         }
 
         public FhirController(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService)
         {
             _fhirServices = services;
             _fhirStructureDefinitionService = fhirStructureDefinitionService;
+        }
+        public FhirController(ICollection<IFhirService> services)
+        {
+            _fhirServices = services;
+
         }
 
         [HttpGet, Route("StructureDefinition/{id}")]
