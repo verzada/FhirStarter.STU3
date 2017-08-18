@@ -6,7 +6,7 @@
   <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
     <valueCode value="pa" />
   </extension>
-  <url value="http://helse-nord.no/FHIR/profiles/Individuals.Patient/Patient" />
+  <url value="http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" />
   <name value="Patient" />
   <status value="draft" />
   <date value="2017-06-13T13:00:03.5581868+02:00" />

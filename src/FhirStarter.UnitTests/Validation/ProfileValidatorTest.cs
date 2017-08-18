@@ -7,6 +7,8 @@ using System.Xml.Linq;
 using FhirStarter.Bonfire.STU3.Validation;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
+using Hl7.Fhir.Specification.Source;
+using Hl7.Fhir.Validation;
 using NUnit.Framework;
 
 namespace FhirStarter.UnitTests.Validation
@@ -14,7 +16,7 @@ namespace FhirStarter.UnitTests.Validation
     [TestFixture]
     internal class ProfileValidatorTest
     {
-        private ProfileValidator _validator;
+        private ProfileValidator _profileValidator;
 
         [SetUp]
         public void Setup()
@@ -24,7 +26,22 @@ namespace FhirStarter.UnitTests.Validation
             var directoryInfo = new FileInfo(location.AbsolutePath).Directory;
             Debug.Assert(directoryInfo != null, "directoryInfo != null");
             Debug.Assert(directoryInfo.FullName != null, "directoryInfo.FullName != null");
-            _validator = new ProfileValidator(true, true, false, directoryInfo.FullName + @"\Resources\StructureDefinitions");
+            var cachedResolver = new CachedResolver(new DirectorySource(directoryInfo.FullName + @"\Resources\StructureDefinitions", includeSubdirectories: true));
+            var coreSource = new CachedResolver(ZipSource.CreateValidationSource());            
+            var combinedSource = new MultiResolver(cachedResolver, coreSource);
+            var settings = new ValidationSettings
+            {
+                EnableXsdValidation = true,
+                GenerateSnapshot = true,
+                Trace = true,
+                ResourceResolver = combinedSource,
+                ResolveExteralReferences = true,
+                SkipConstraintValidation = false
+            };
+            var validator = new Validator(settings);
+            _profileValidator = new ProfileValidator(validator);
+
+
         }
 
         [TestCase("ValidPatient.xml")]
@@ -47,7 +64,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(patient);
 
-            var validResource = _validator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
 
@@ -71,7 +88,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(diagnosticReport);
 
-            var validResource = _validator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
 
@@ -95,7 +112,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(medicationStatement);
 
-            var validResource = _validator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
 
@@ -119,7 +136,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(bundle);
 
-            var validResource = _validator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
             Console.WriteLine(XDocument.Parse(FhirSerializer.SerializeToXml(validResource)).ToString());
             Assert.AreEqual(0, validResource.Issue.Count, "Should not get an operation outcome");
         }

@@ -11,27 +11,16 @@ namespace FhirStarter.Bonfire.STU3.Validation
         private readonly object _locked = "";
         //private const string ProfileLocation = @"\Profile";
         private static Validator _validator;
-        public ProfileValidator(bool validateXsd, bool showTrace, bool reloadValidator, string profileFolder)
+        public ProfileValidator(Validator validator)
         {
-            if (_validator != null && !reloadValidator) return;
-            var coreSource = new CachedResolver(ZipSource.CreateValidationSource());
-            var cachedResolver = new CachedResolver(new DirectorySource(profileFolder, includeSubdirectories: true));
-            var combinedSource = new MultiResolver(cachedResolver, coreSource);
-            var settings = new ValidationSettings
+            if (_validator == null)
             {
-                EnableXsdValidation = validateXsd,
-                GenerateSnapshot = true,
-                Trace = showTrace,
-                ResourceResolver = combinedSource,
-                ResolveExteralReferences = true,SkipConstraintValidation = false
-            };
-            _validator = new Validator(settings);
+                _validator = validator;
+            };            
         }
 
         public OperationOutcome Validate(XmlReader reader, bool onlyErrors)
         {
-            //lock (_locked)
-            //{
                 var result = _validator.Validate(reader);
                 if (!onlyErrors)
                 {
@@ -44,9 +33,7 @@ namespace FhirStarter.Bonfire.STU3.Validation
 
                 result.Issue = invalidItems;
                 return result;
-            //}
-
-
+            
         }
     }
 }

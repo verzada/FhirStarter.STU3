@@ -87,8 +87,7 @@ namespace FhirStarter.Flare.STU3
                         BindIFhirServices(kernel, fhirService, fhirStructureDefinition, classType);
                     }
 
-                }
-                BindProfileValidator(kernel);
+                }                
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -126,20 +125,8 @@ namespace FhirStarter.Flare.STU3
             }
         }
 
-        private static void BindProfileValidator(IBindingRoot kernel)
-        {
-            var setting = ConfigurationManager.AppSettings["EnableValidation"];
-
-            var location = new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase);
-            var directoryInfo = new FileInfo(location.AbsolutePath).Directory;
-            if (setting == null || !Convert.ToBoolean(setting)) return;
-            if (directoryInfo != null)
-            {
-                var instance = new ProfileValidator(true, true, false,
-                    directoryInfo.FullName + @"\Resources\StructureDefinitions");
-                kernel.Bind<ProfileValidator>().ToConstant(instance);
-            }
-        }
+       
+        
 
         private static void BindIFhirServices(IBindingRoot kernel, Type fhirService, Type fhidStructureDefinition,
             Type classType)
@@ -154,8 +141,14 @@ namespace FhirStarter.Flare.STU3
             }
             else
             {
-                var instance = (IFhirStructureDefinitionService) Activator.CreateInstance(classType);
-                kernel.Bind<IFhirStructureDefinitionService>().ToConstant(instance);
+                var structureDefinitionService = (IFhirStructureDefinitionService) Activator.CreateInstance(classType);
+                kernel.Bind<IFhirStructureDefinitionService>().ToConstant(structureDefinitionService);
+                var validator = structureDefinitionService.GetValidator();
+                if (validator != null)
+                {
+                    var profileValidator = new ProfileValidator(validator);
+                    kernel.Bind<ProfileValidator>().ToConstant(profileValidator);
+                }                
                 _amountOfIFhirStructureDefinitionsInitialized++;
             }
         }
