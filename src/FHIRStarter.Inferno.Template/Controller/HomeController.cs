@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace FhirStarter.Inferno.Controller
+namespace FhirStarter.Inferno.Template.Controller
 {
     public class HomeController : System.Web.Mvc.Controller
     {

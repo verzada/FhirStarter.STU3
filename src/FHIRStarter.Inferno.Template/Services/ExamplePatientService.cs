@@ -4,7 +4,9 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Web;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using FhirStarter.Bonfire.STU3.Helper;
 using FhirStarter.Bonfire.STU3.Interface;
 using Hl7.Fhir.Model;
@@ -12,10 +14,18 @@ using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Spark.Engine.Core;
 
-namespace FhirStarter.Inferno.Services
+namespace FhirStarter.Inferno.Template.Services
 {
     public class ExamplePatientService : IFhirService
     {
+        //Edit
+        public ExamplePatientService()
+        {
+#pragma warning disable 219
+            int i = 0;
+#pragma warning restore 219
+        }
+
         public string GetServiceResourceReference()
         {
             return nameof(Patient);
@@ -23,6 +33,7 @@ namespace FhirStarter.Inferno.Services
 
         public CapabilityStatement.RestComponent GetRestDefinition()
         {
+
             var assembly = Assembly.GetExecutingAssembly();
             var names = assembly.GetManifestResourceNames();
             foreach (var name in names)
@@ -37,8 +48,20 @@ namespace FhirStarter.Inferno.Services
                     return item.Rest[0];
                 }
             }
-            throw new InvalidDataException("Metadata information has not been added");
+            throw new InvalidDataException();
         }
+
+        public static T CreateObjectFromXmlDocument<T>(XmlDocument source, string defaultNamespace = null)
+        {
+            T result;
+            var xmlSerializer = new XmlSerializer(typeof(T), defaultNamespace);
+            using (var xmlReader = XmlReader.Create(new StringReader(source.OuterXml)))
+            {
+                result = (T)xmlSerializer.Deserialize(xmlReader);
+            }
+            return result;
+        }
+
 
         public OperationDefinition GetOperationDefinition()
         {
@@ -104,7 +127,7 @@ namespace FhirStarter.Inferno.Services
             return defintion;
         }
 
-       
+
 
         private static Base MockPatient()
         {
@@ -112,13 +135,13 @@ namespace FhirStarter.Inferno.Services
 
             return new Patient
             {
-                Meta = new Meta { LastUpdated = date.ToDateTimeOffset()},
+                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(), Profile = new List<string> { "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" } },
                 Id = "12345678901",
                 Active = true,
                 Name =
                     new List<HumanName>
                     {
-                      new HumanName{Family = "Normann", Given = new List<string>{"Ola"}}
+                        new HumanName{Family = "Normann", Given = new List<string>{"Ola"}}
                     },
                 Telecom =
                     new List<ContactPoint>
@@ -127,11 +150,11 @@ namespace FhirStarter.Inferno.Services
                     },
                 Gender = AdministrativeGender.Male,
                 BirthDate = "2000-01-01"
-                
+
             };
         }
 
-       
+
 
         public HttpResponseMessage Create(IKey key, Resource resource)
         {
@@ -140,8 +163,32 @@ namespace FhirStarter.Inferno.Services
 
         public Base Read(SearchParams searchParams)
         {
-            throw new ArgumentException("Using " + nameof(SearchParams) +
-                                        " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
+            var parameters = searchParams.Parameters;
+
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Item1.ToLower().Contains("log") && parameter.Item2.ToLower().Contains("normal"))
+                {
+                    throw new ArgumentException("Using " + nameof(SearchParams) +
+                                                " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
+                }
+                if (parameter.Item1.Contains("log") && parameter.Item2.Contains("operationoutcome"))
+                {
+                    var operationOutcome = new OperationOutcome { Issue = new List<OperationOutcome.IssueComponent>() };
+                    var issue = new OperationOutcome.IssueComponent
+                    {
+                        Severity = OperationOutcome.IssueSeverity.Information,
+                        Code = OperationOutcome.IssueType.Incomplete,
+                        Details = new CodeableConcept("SomeExampleException", typeof(FhirOperationException).ToString(),
+                            "Something expected happened and needs to be handled with more detail.")
+                    };
+                    operationOutcome.Issue.Add(issue);
+                    //var errorMessage = fh
+                    var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
+                    throw new ArgumentException(serialized);
+                }
+            }
+            throw new ArgumentException("Generic error");
         }
 
         public Base Read(string id)
@@ -163,5 +210,11 @@ namespace FhirStarter.Inferno.Services
         {
             throw new NotImplementedException();
         }
+
+        public ICollection<string> GetStructureDefinitionNames()
+        {
+            return new List<string> { GetServiceResourceReference() };
+        }
     }
 }
+
