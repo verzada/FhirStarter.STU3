@@ -180,7 +180,7 @@ namespace FhirStarter.Inferno.Services
                         Severity = OperationOutcome.IssueSeverity.Information,
                         Code = OperationOutcome.IssueType.Incomplete,
                         Details = new CodeableConcept("SomeExampleException", typeof(FhirOperationException).ToString(),
-                            "Something expected happened and is handled with more detail.")
+                            "Something expected happened and needs to be handled with more detail.")
                     };
                     operationOutcome.Issue.Add(issue);
                     //var errorMessage = fh
