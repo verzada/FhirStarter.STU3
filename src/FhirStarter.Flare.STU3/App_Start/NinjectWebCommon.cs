@@ -2,11 +2,13 @@
 using System.Configuration;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Log;
 using FhirStarter.Bonfire.STU3.Validation;
 using FhirStarter.Flare.STU3;
+using Hl7.Fhir.Model;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Syntax;
@@ -19,8 +21,11 @@ namespace FhirStarter.Flare.STU3
 {
     public static class NinjectWebCommon
     {
-        private static int Count1 = 0;
-        private static int Count2 = 0;
+        private static readonly log4net.ILog Log =
+            log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static int _amountOfInitializedIFhirServices;
+        private static int _amountOfIFhirStructureDefinitionsInitialized;
+
         // ReSharper disable once InconsistentNaming
         private static readonly Bootstrapper _bootstrapper = new Bootstrapper();
 
@@ -70,7 +75,6 @@ namespace FhirStarter.Flare.STU3
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-
             try
             {
                 var fhirService = typeof(IFhirService);
@@ -78,10 +82,11 @@ namespace FhirStarter.Flare.STU3
 
                 foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    foreach (Type classType in asm.GetTypes())
+                    foreach (var classType in asm.GetTypes())
                     {
-                        BindIFhirServices(kernel, fhirService, fhirStructureDefinition, classType);                        
+                        BindIFhirServices(kernel, fhirService, fhirStructureDefinition, classType);
                     }
+
                 }
                 BindProfileValidator(kernel);
             }
@@ -89,9 +94,35 @@ namespace FhirStarter.Flare.STU3
             {
                 ExceptionLogger.LogReflectionTypeLoadException(ex);
             }
-            if (Count1 == 0 || Count2 == 0)
+
+            CheckForLackingServices();
+           
+        }
+
+        private static void CheckForLackingServices()
+        {
+            var strBuilder = new StringBuilder();
+            if (_amountOfInitializedIFhirServices == 0)
             {
-                throw new Exception("Missing some implementations");
+                const string iFhirServiceErrorMessage = "No services using " + nameof(IFhirService) +
+                                                        " interface has been found and initalized, therefore the FHIR service will not work. Also causes Ninject to throw an exception with \"Server error\" message. Please implement a FHIR service using the " +
+                                                        nameof(IFhirService) + " interface";
+                strBuilder.AppendLine(iFhirServiceErrorMessage);
+                Log.Fatal(iFhirServiceErrorMessage);
+            }
+            if (_amountOfIFhirStructureDefinitionsInitialized == 0)
+            {
+                const string structureDefinitionErrorMessage = "Class(es) using " + nameof(IFhirStructureDefinitionService) +
+                                                               " was not found in any of the dlls used by the web service. In order for " +
+                                                               nameof(StructureDefinition) +
+                                                               "s to be availble, please implement a class using the interface which defines where the " +
+                                                               nameof(StructureDefinition) + "s can be found.";
+                strBuilder.AppendLine(structureDefinitionErrorMessage);
+                Log.Warn(structureDefinitionErrorMessage);
+            }
+            if (strBuilder.Length > 0)
+            {
+                throw new ArgumentException(strBuilder.ToString());
             }
         }
 
@@ -104,27 +135,29 @@ namespace FhirStarter.Flare.STU3
             if (setting == null || !Convert.ToBoolean(setting)) return;
             if (directoryInfo != null)
             {
-                var instance = new ProfileValidator(true, true, false, directoryInfo.FullName + @"\Resources\StructureDefinitions");
+                var instance = new ProfileValidator(true, true, false,
+                    directoryInfo.FullName + @"\Resources\StructureDefinitions");
                 kernel.Bind<ProfileValidator>().ToConstant(instance);
             }
         }
 
-        private static void BindIFhirServices(IBindingRoot kernel, Type fhirService, Type fhidStructureDefinition, Type classType)
+        private static void BindIFhirServices(IBindingRoot kernel, Type fhirService, Type fhidStructureDefinition,
+            Type classType)
         {
-            if ((!fhirService.IsAssignableFrom(classType) && !fhidStructureDefinition.IsAssignableFrom(classType)) ||
+            if (!fhirService.IsAssignableFrom(classType) && !fhidStructureDefinition.IsAssignableFrom(classType) ||
                 classType.IsInterface || classType.IsAbstract) return;
             if (fhirService.IsAssignableFrom(classType))
             {
-                Count1++;
                 var instance = (IFhirService) Activator.CreateInstance(classType);
                 kernel.Bind<IFhirService>().ToConstant(instance);
+                _amountOfInitializedIFhirServices++;
             }
             else
             {
-                Count2++;
-                var instance = (IFhirStructureDefinitionService)Activator.CreateInstance(classType);
+                var instance = (IFhirStructureDefinitionService) Activator.CreateInstance(classType);
                 kernel.Bind<IFhirStructureDefinitionService>().ToConstant(instance);
+                _amountOfIFhirStructureDefinitionsInitialized++;
             }
         }
-        }    
+    }
 }

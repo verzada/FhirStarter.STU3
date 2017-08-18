@@ -10,6 +10,8 @@ namespace FhirStarter.Flare.STU3
     {
         protected void Application_Start()
         {
+            XmlConfigurator.Configure();
+
             AreaRegistration.RegisterAllAreas();
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -17,8 +19,6 @@ namespace FhirStarter.Flare.STU3
 
             GlobalConfiguration.Configure(Configure);
           //  BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            XmlConfigurator.Configure();
         }
 
         private void Configure(HttpConfiguration config)
