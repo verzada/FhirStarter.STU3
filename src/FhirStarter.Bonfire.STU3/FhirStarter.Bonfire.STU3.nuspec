@@ -4,7 +4,7 @@
     <id>FhirStarter.Bonfire.STU3</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>verzada</authors>
+    <authors>verzada, snoopie72</authors>
     <owners>$author$</owners>
     <description>$description$</description>
     <copyright>$copyright$</copyright>
