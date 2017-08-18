@@ -68,7 +68,6 @@ namespace FhirStarter.Bonfire.STU3.Service
             {
                 return service.Delete(key);
             }
-
             throw new ArgumentException("Service is null, cannot update resource of type " + type);
         }
 
@@ -97,7 +96,7 @@ namespace FhirStarter.Bonfire.STU3.Service
             {
                 throw new ArgumentException("The resource type " + type + " is not supported by the available services.");
             }
-            throw new ArgumentException("The resource type " + type + " is not supported by the available service.");
+            throw new ArgumentException("There are no available services.");
         }
 
         public CapabilityStatement CreateMetadata(ICollection<IFhirService> services)

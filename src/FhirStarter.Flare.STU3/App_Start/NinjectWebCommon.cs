@@ -100,6 +100,7 @@ namespace FhirStarter.Flare.STU3
 
         private static void CheckForLackingServices()
         {
+            var throwException = false;
             var strBuilder = new StringBuilder();
             if (_amountOfInitializedIFhirServices == 0)
             {
@@ -108,6 +109,7 @@ namespace FhirStarter.Flare.STU3
                                                         nameof(IFhirService) + " interface";
                 strBuilder.AppendLine(iFhirServiceErrorMessage);
                 Log.Fatal(iFhirServiceErrorMessage);
+                throwException = true;
             }
             if (_amountOfIFhirStructureDefinitionsInitialized == 0)
             {
@@ -119,7 +121,7 @@ namespace FhirStarter.Flare.STU3
                 strBuilder.AppendLine(structureDefinitionErrorMessage);
                 Log.Warn(structureDefinitionErrorMessage);
             }
-            if (strBuilder.Length > 0)
+            if (strBuilder.Length > 0 && throwException)
             {
                 throw new ArgumentException(strBuilder.ToString());
             }

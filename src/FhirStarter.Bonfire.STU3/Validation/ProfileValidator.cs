@@ -2,14 +2,11 @@
 using System.Linq;
 using System.Xml;
 using Hl7.Fhir.Model;
-using Hl7.Fhir.Specification.Source;
 
 namespace FhirStarter.Bonfire.STU3.Validation
 {
     public class ProfileValidator
     {
-        private readonly object _locked = "";
-        //private const string ProfileLocation = @"\Profile";
         private static Validator _validator;
         public ProfileValidator(Validator validator)
         {
@@ -33,7 +30,6 @@ namespace FhirStarter.Bonfire.STU3.Validation
 
                 result.Issue = invalidItems;
                 return result;
-            
         }
     }
 }
