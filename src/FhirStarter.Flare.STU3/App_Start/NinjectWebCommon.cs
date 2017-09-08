@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
@@ -79,11 +80,11 @@ namespace FhirStarter.Flare.STU3
             {
                 var fhirService = typeof(IFhirService);
                 var fhirStructureDefinition = typeof(IFhirStructureDefinitionService);
-
+               
                 foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
                 {
                     foreach (var classType in asm.GetTypes())
-                    {
+                    {                        
                         BindIFhirServices(kernel, fhirService, fhirStructureDefinition, classType);
                     }
 
@@ -117,6 +118,16 @@ namespace FhirStarter.Flare.STU3
                                                                " was not found in any of the dlls used by the web service. In order for " +
                                                                nameof(StructureDefinition) +
                                                                "s to be availble, please implement a class using the interface which defines where the " +
+                                                               nameof(StructureDefinition) + "s can be found.";
+                strBuilder.AppendLine(structureDefinitionErrorMessage);
+                Log.Warn(structureDefinitionErrorMessage);
+            }
+            if (_amountOfIFhirStructureDefinitionsInitialized != 1)
+            {
+                const string structureDefinitionErrorMessage = "Class(es) using " + nameof(IFhirStructureDefinitionService) +
+                                                               " was found more than once. In order for " +
+                                                               nameof(StructureDefinition) +
+                                                               "s to be available, please implement only one class using the interface which defines where the " +
                                                                nameof(StructureDefinition) + "s can be found.";
                 strBuilder.AppendLine(structureDefinitionErrorMessage);
                 Log.Warn(structureDefinitionErrorMessage);
