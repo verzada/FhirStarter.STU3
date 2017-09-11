@@ -110,6 +110,12 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpPost, Route("{type}")]
         public HttpResponseMessage Create(string type, Resource resource)
         {
+
+            resource = (Resource) ValidateResource(resource);
+            if (resource is OperationOutcome)
+            {
+                return SendResponse(resource);
+            }
             var service = _handler.FindServiceFromList(_fhirServices, type);
             return _handler.ResourceCreate(type, resource, service);
         }
@@ -142,7 +148,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             var accept = headers.Accept;
             var returnJson = ReturnJson(accept);
 
-            resource = ValidateResource(resource);
+            resource = ValidateResource((Resource) resource);
 
             StringContent httpContent;
             if (!returnJson)
@@ -162,7 +168,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             return response;
         }
 
-        private Base ValidateResource(Base resource)
+        private Base ValidateResource(Resource resource)
         {
             if (_profileValidator == null) return resource;
             var resourceAsXDocument = XDocument.Parse(FhirSerializer.SerializeToXml(resource));

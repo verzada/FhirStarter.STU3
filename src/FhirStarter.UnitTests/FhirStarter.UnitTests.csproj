@@ -81,6 +81,10 @@
       <Project>{8b1d06ce-6a59-4012-bd7a-ab799fbf0df2}</Project>
       <Name>FHIRStarter.Inferno</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Spark.Engine\Spark.Engine.csproj">
+      <Project>{73D29C45-01B7-4B14-95F1-D5B6DEA77404}</Project>
+      <Name>Spark.Engine</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Medication\MedicationStatement.xml" />
