@@ -72,6 +72,7 @@
     <Compile Include="Filter\AbstractExceptionFilter.cs" />
     <Compile Include="Filter\ExceptionFilter.cs" />
     <Compile Include="Helper\UrlHandler.cs" />
+    <Compile Include="Interface\IFhirMockupService.cs" />
     <Compile Include="Interface\IFhirService.cs" />
     <Compile Include="Interface\IFhirStructureDefinitionService.cs" />
     <Compile Include="Log\ExceptionLogger.cs" />

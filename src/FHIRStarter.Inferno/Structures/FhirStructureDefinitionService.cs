@@ -17,11 +17,8 @@ namespace FhirStarter.Inferno.Structures
 
         public ICollection<StructureDefinition> GetStructureDefinitions()
         {
-            
             var structureDefinitionFiles = Directory.GetFiles(_structureDefinitionsFolder);
             return structureDefinitionFiles.Select(File.ReadAllText).Select(content => new FhirXmlParser().Parse<StructureDefinition>(content)).ToList();
-            
-
         }
 
         public Validator GetValidator()
@@ -42,7 +39,7 @@ namespace FhirStarter.Inferno.Structures
             return new Validator(settings);
         }
 
-        public IResourceResolver GetResourceResolver()
+        private IResourceResolver GetResourceResolver()
         {
             var cachedResolver = new CachedResolver(new DirectorySource(_structureDefinitionsFolder, true));
             return cachedResolver;
