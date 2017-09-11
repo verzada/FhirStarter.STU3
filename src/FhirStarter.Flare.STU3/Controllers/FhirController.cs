@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -28,9 +26,18 @@ namespace FhirStarter.Flare.STU3.Controllers
     public class FhirController : ApiController
     {
         private readonly ICollection<IFhirService> _fhirServices;
+        private readonly ICollection<IFhirMockupService> _fhirMockupServices;
         private readonly IFhirStructureDefinitionService _fhirStructureDefinitionService;
         private readonly ServiceHandler _handler = new ServiceHandler();
         private readonly ProfileValidator _profileValidator;
+
+        public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, ProfileValidator profileValidator, IFhirStructureDefinitionService fhirStructureDefinitionService)
+        {
+            _fhirServices = services;
+            _fhirMockupServices = mockupServices;
+            _profileValidator = profileValidator;
+            _fhirStructureDefinitionService = fhirStructureDefinitionService;
+        }
 
         public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator, IFhirStructureDefinitionService fhirStructureDefinitionService)
         {
@@ -39,11 +46,25 @@ namespace FhirStarter.Flare.STU3.Controllers
             _fhirStructureDefinitionService = fhirStructureDefinitionService;
         }
 
+        public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, IFhirStructureDefinitionService fhirStructureDefinitionService)
+        {
+            _fhirServices = services;
+            _fhirMockupServices = mockupServices;
+            _fhirStructureDefinitionService = fhirStructureDefinitionService;
+        }
+
         public FhirController(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService)
         {
             _fhirServices = services;
             _fhirStructureDefinitionService = fhirStructureDefinitionService;
         }
+
+        public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices)
+        {
+            _fhirServices = services;
+            _fhirMockupServices = mockupServices;
+        }
+
         public FhirController(ICollection<IFhirService> services)
         {
             _fhirServices = services;
@@ -68,8 +89,6 @@ namespace FhirStarter.Flare.STU3.Controllers
             
         }
 
-        
-
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
         public HttpResponseMessage Read(string type, string id)
         {
@@ -79,7 +98,7 @@ namespace FhirStarter.Flare.STU3.Controllers
                 return SendResponse(operationDefinitions);
             }
 
-            var service = _handler.FindServiceFromList(_fhirServices, type);
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             var result = service.Read(id);
 
             return SendResponse(result);
@@ -89,7 +108,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpGet, Route("{type}")]
         public HttpResponseMessage Read(string type)
         {
-            var service = _handler.FindServiceFromList(_fhirServices, type);
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             var parameters = Request.GetSearchParams();
             if (!(parameters.Parameters.Count > 0)) return new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
             var results = service.Read(parameters);
@@ -101,7 +120,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         public HttpResponseMessage Query(string _query)
         {
             var searchParams = Request.GetSearchParams();
-            var service = _handler.FindServiceFromList(_fhirServices, searchParams.Query);
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, searchParams.Query);
             var result = service.Read(searchParams);
 
             return SendResponse(result);
@@ -116,28 +135,27 @@ namespace FhirStarter.Flare.STU3.Controllers
             {
                 return SendResponse(resource);
             }
-            var service = _handler.FindServiceFromList(_fhirServices, type);
             return _handler.ResourceCreate(type, resource, service);
         }
 
         [HttpPut, Route("{type}/{id}")]
         public HttpResponseMessage Update(string type, string id, Resource resource)
         {
-            var service = _handler.FindServiceFromList(_fhirServices, type);
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             return _handler.ResourceUpdate(type, id, resource, service);
         }
 
         [HttpDelete, Route("{type}/{id}")]
         public HttpResponseMessage Delete(string type, string id)
         {
-            var service = _handler.FindServiceFromList(_fhirServices, type);
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             return _handler.ResourceDelete(type, Key.Create(type, id), service);
         }
 
         [HttpPatch, Route("{type}/{id}")]
         public HttpResponseMessage Patch(string type, string id, Resource resource)
         {
-            var service = _handler.FindServiceFromList(_fhirServices, type);
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             return _handler.ResourcePatch(type, Key.Create(type, id), resource, service);
         }
 

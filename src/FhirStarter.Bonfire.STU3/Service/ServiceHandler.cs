@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Configuration;
 using FhirStarter.Bonfire.STU3.Interface;
 using Hl7.Fhir.Model;
@@ -12,7 +14,11 @@ using Spark.Engine.Service.FhirServiceExtensions;
 namespace FhirStarter.Bonfire.STU3.Service
 {
    public class ServiceHandler
-    {
+   {
+       public static string MockupEnabled = nameof(MockupEnabled);
+       private static readonly log4net.ILog Log =
+           log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public Base GetOperationDefinitions(string id, ICollection<IFhirService> services)
         {
             var service = services.FirstOrDefault(s => s.GetServiceResourceReference().Equals(id));
@@ -80,26 +86,59 @@ namespace FhirStarter.Bonfire.STU3.Service
             throw new ArgumentException("Service is null, cannot update resource of type " + type);
         }
 
-        public IFhirService FindServiceFromList(ICollection<IFhirService> services, string type)
+        public IFhirService FindServiceFromList(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, string type)
         {
-            if (services.Any())
+            if (IsMockupEnabled())
             {
-                foreach (var service in services)
-                {
-                    if (service.GetServiceResourceReference().Equals(type))
-                    {
-                        return service;
-                    }
-                }
+                return GetMockupService(mockupServices, type);
             }
-            if (services.Count > 1)
-            {
-                throw new ArgumentException("The resource type " + type + " is not supported by the available services.");
-            }
+
+            if (GetService(services, type, out var fhirService)) return fhirService;
             throw new ArgumentException("There are no available services.");
         }
 
-        public CapabilityStatement CreateMetadata(ICollection<IFhirService> services)
+       private static bool GetService(ICollection<IFhirService> services, string type, out IFhirService fhirService)
+       {
+           fhirService = null;
+            if (services.Any())
+           {
+               foreach (var service in services)
+               {
+                   if (service.GetServiceResourceReference().Equals(type))
+                   {
+                       {
+                           fhirService = service;
+                           return true;
+                       }
+                   }
+               }
+           }
+           if (services.Count > 1)
+           {
+               throw new ArgumentException("The resource type " + type + " is not supported by the available services.");
+           }
+           return false;
+       }
+
+       private static IFhirService GetMockupService(ICollection<IFhirMockupService> mockupServices, string type)
+       {
+           if (mockupServices.Any())
+           {
+               foreach (var mockup in mockupServices)
+               {
+                   if (mockup.GetServiceResourceReference().Equals(type))
+                   {
+                        Log.Info("EnableMockup is set to true, returning mockupservice of type " +type);
+                       return mockup;
+                   }
+               }
+           }
+           throw new ArgumentException("Could not find any mockup services defined by the interface " +
+                                       nameof(IFhirMockupService) +
+                                       " despite having the EnabledMockup option in AppSettings in the web.config.");
+       }
+
+       public CapabilityStatement CreateMetadata(ICollection<IFhirService> services)
         {
             if (services.Any())
             {
@@ -167,6 +206,12 @@ namespace FhirStarter.Bonfire.STU3.Service
             return serviceName;
         }
 
+        public static bool IsMockupEnabled()
+        {
+            var stringValue = ConfigurationManager.AppSettings[MockupEnabled];
+            var isMockupEnabled = Convert.ToBoolean(stringValue);
+            return isMockupEnabled;
+        }
      
     }
 }
