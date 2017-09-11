@@ -129,7 +129,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpPost, Route("{type}")]
         public HttpResponseMessage Create(string type, Resource resource)
         {
-
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             resource = (Resource) ValidateResource(resource);
             if (resource is OperationOutcome)
             {
