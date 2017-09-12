@@ -158,7 +158,7 @@ namespace FhirStarter.Inferno.Services
 
         public HttpResponseMessage Create(IKey key, Resource resource)
         {
-            throw new NotImplementedException();
+            return new HttpResponseMessage();
         }
 
         public Base Read(SearchParams searchParams)
