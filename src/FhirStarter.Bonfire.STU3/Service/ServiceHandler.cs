@@ -100,7 +100,7 @@ namespace FhirStarter.Bonfire.STU3.Service
        private static bool GetService(ICollection<IFhirService> services, string type, out IFhirService fhirService)
        {
            fhirService = null;
-            if (services.Any())
+           if (services != null && services.Any())
            {
                foreach (var service in services)
                {
@@ -113,16 +113,17 @@ namespace FhirStarter.Bonfire.STU3.Service
                    }
                }
            }
-           if (services.Count > 1)
+           if (services != null && services.Count > 1)
            {
-               throw new ArgumentException("The resource type " + type + " is not supported by the available services.");
+               throw new ArgumentException("The resource type " + type +
+                                           " is not supported by the available services.");
            }
            return false;
        }
 
        private static IFhirService GetMockupService(ICollection<IFhirMockupService> mockupServices, string type)
        {
-           if (mockupServices.Any())
+           if (mockupServices != null && mockupServices.Any())
            {
                foreach (var mockup in mockupServices)
                {
