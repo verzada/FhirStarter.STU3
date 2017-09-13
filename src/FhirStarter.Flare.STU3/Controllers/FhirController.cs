@@ -202,14 +202,18 @@ namespace FhirStarter.Flare.STU3.Controllers
         {
             if (_profileValidator == null) return resource;
             if (resource is OperationOutcome) return resource;
-            var resourceName = resource.TypeName;
-            var structureDefinition = Load(resourceName);
-            var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
-                        resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
-            if (!found)
+            if (!(resource is StructureDefinition))
             {
-                throw new ArgumentException($"Profile for {resourceName} must be set to: {structureDefinition.Url}");
+                var resourceName = resource.TypeName;
+                var structureDefinition = Load(resourceName);
+                var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
+                            resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
+                if (!found)
+                {
+                    throw new ArgumentException($"Profile for {resourceName} must be set to: {structureDefinition.Url}");
+                }
             }
+            
             var resourceAsXDocument = XDocument.Parse(FhirSerializer.SerializeToXml(resource));
             var validationResult = _profileValidator.Validate(resourceAsXDocument.CreateReader(), true);
             if (validationResult.Issue.Count > 0)
@@ -223,15 +227,13 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         private static bool ReturnJson(HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> accept)
         {
-            var jsonHeaders = Hl7.Fhir.Rest.ContentType.JSON_CONTENT_HEADERS;
+            var jsonHeaders = ContentType.JSON_CONTENT_HEADERS;
             var returnJson = false;
             foreach (var x in accept)
             {
-                foreach (var y in jsonHeaders)
+                if (jsonHeaders.Any(y => x.MediaType.Contains(y)))
                 {
-                    if (!x.MediaType.Contains(y)) continue;
                     returnJson = true;
-                    break;
                 }
             }
             return returnJson;
