@@ -7,7 +7,6 @@ using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Xml.Linq;
-using FhirStarter.Bonfire.STU3.Filter;
 using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Service;
 using FhirStarter.Bonfire.STU3.Validation;
@@ -22,7 +21,7 @@ namespace FhirStarter.Flare.STU3.Controllers
 {
     [RoutePrefix("fhir"), EnableCors("*", "*", "*", "*")]
     [RouteDataValuesOnly]
-    [ExceptionFilter]
+    [Bonfire.STU3.Filter.ExceptionFilter]
     public class FhirController : ApiController
     {
         private readonly ICollection<IFhirService> _fhirServices;
@@ -200,7 +199,7 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         private static bool ReturnJson(HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> accept)
         {
-            var jsonHeaders = Hl7.Fhir.Rest.ContentType.JSON_CONTENT_HEADERS;
+            var jsonHeaders = ContentType.JSON_CONTENT_HEADERS;
             var returnJson = false;
             foreach (var x in accept)
             {
