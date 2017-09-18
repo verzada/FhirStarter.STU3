@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -73,19 +74,26 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpGet, Route("StructureDefinition/{id}")]
         public HttpResponseMessage GetStructureDefinition(string id)
         {
-            var structureDefinitionNames = _handler.GetStructureDefinitionNames(_fhirServices);
-            if (!structureDefinitionNames.Contains(id))
-            {
-                throw new FhirOperationException($"{nameof(StructureDefinition)} {id} not found", HttpStatusCode.InternalServerError);
-            }
-            var structureDefinitions = _fhirStructureDefinitionService.GetStructureDefinitions();
-            var structureDefinition = structureDefinitions.FirstOrDefault(definition => definition.Name.Equals(id));
+            var structureDefinition = Load(id);
             if (structureDefinition != null)
             {
                 return SendResponse(structureDefinition);
             }
             throw new FhirOperationException($"{nameof(StructureDefinition)} for {id} not found", HttpStatusCode.InternalServerError);
             
+        }
+
+        private StructureDefinition Load(string id)
+        {
+            var structureDefinitionNames = _handler.GetStructureDefinitionNames(_fhirServices);
+            if (!structureDefinitionNames.Contains(id))
+            {
+                throw new FhirOperationException($"{nameof(StructureDefinition)} {id} not found",
+                    HttpStatusCode.InternalServerError);
+            }
+            var structureDefinitions = _fhirStructureDefinitionService.GetStructureDefinitions();
+            var structureDefinition = structureDefinitions.FirstOrDefault(definition => definition.Name.Equals(id));
+            return structureDefinition;
         }
 
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
@@ -129,6 +137,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         public HttpResponseMessage Create(string type, Resource resource)
         {
             var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
+            
             resource = (Resource) ValidateResource(resource);
             if (resource is OperationOutcome)
             {
@@ -164,8 +173,11 @@ namespace FhirStarter.Flare.STU3.Controllers
             var headers = Request.Headers;
             var accept = headers.Accept;
             var returnJson = ReturnJson(accept);
-
-            resource = ValidateResource((Resource) resource);
+            if (!(resource is OperationOutcome))
+            {
+                resource = ValidateResource((Resource)resource);
+            }
+            
 
             StringContent httpContent;
             if (!returnJson)
@@ -188,12 +200,27 @@ namespace FhirStarter.Flare.STU3.Controllers
         private Base ValidateResource(Resource resource)
         {
             if (_profileValidator == null) return resource;
+            if (resource is OperationOutcome) return resource;
+            if (!(resource is StructureDefinition))
+            {
+                var resourceName = resource.TypeName;
+                var structureDefinition = Load(resourceName);
+                var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
+                            resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
+                if (!found)
+                {
+                    throw new ArgumentException($"Profile for {resourceName} must be set to: {structureDefinition.Url}");
+                }
+            }
+            
             var resourceAsXDocument = XDocument.Parse(FhirSerializer.SerializeToXml(resource));
             var validationResult = _profileValidator.Validate(resourceAsXDocument.CreateReader(), true);
             if (validationResult.Issue.Count > 0)
             {
                 resource = validationResult;
             }
+
+
             return resource;
         }
 
@@ -203,11 +230,9 @@ namespace FhirStarter.Flare.STU3.Controllers
             var returnJson = false;
             foreach (var x in accept)
             {
-                foreach (var y in jsonHeaders)
+                if (jsonHeaders.Any(y => x.MediaType.Contains(y)))
                 {
-                    if (!x.MediaType.Contains(y)) continue;
                     returnJson = true;
-                    break;
                 }
             }
             return returnJson;

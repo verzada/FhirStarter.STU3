@@ -58,13 +58,12 @@ namespace FhirStarter.Bonfire.STU3.Service
         }
         public HttpResponseMessage ResourceUpdate(string type, string id, Resource resource, IFhirBaseService service)
         {
-            if (service != null && !string.IsNullOrEmpty(type) && resource != null && !string.IsNullOrEmpty(id))
-            {
-                var key = Key.Create(type, id);
-                var result = service.Update(key, resource);
-                if (result != null)
-                    return result;
-            }
+            if (service == null || string.IsNullOrEmpty(type) || resource == null || string.IsNullOrEmpty(id))
+                throw new ArgumentException("Service is null, cannot update resource of type " + type);
+            var key = Key.Create(type, id);
+            var result = service.Update(key, resource);
+            if (result != null)
+                return result;
             throw new ArgumentException("Service is null, cannot update resource of type " + type);
         }
 
