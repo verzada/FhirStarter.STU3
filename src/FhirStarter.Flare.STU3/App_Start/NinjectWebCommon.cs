@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
@@ -92,16 +93,14 @@ namespace FhirStarter.Flare.STU3
                     new TypeInitializer(true, fhirStructureDefinition, nameof(IFhirStructureDefinitionService))
                 };
 
-               
-                foreach (var asm in AssemblyLoaderHelper.GetReflectionAssemblies())
+                var serviceAssemblies = AssemblyLoaderHelper.GetFhirServiceAssemblies();
+                foreach (var asm in serviceAssemblies)
                 {
                     foreach (var classType in asm.GetTypes())
                     {
                         BindIFhirServices(kernel, serviceTypes, classType);
                     }
                 }
-                    
-
                 
             }
             catch (ReflectionTypeLoadException ex)
