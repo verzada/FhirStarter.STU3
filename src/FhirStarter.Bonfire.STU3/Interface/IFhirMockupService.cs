@@ -1,6 +1,6 @@
 ﻿namespace FhirStarter.Bonfire.STU3.Interface
 {
-    public interface IFhirMockupService:IFhirService
+    public interface IFhirMockupService:IFhirBaseService
     {
     }
 }

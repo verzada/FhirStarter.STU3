@@ -28,7 +28,7 @@ namespace FhirStarter.Bonfire.STU3.Service
             return operationDefinitions;
         }
 
-        public HttpResponseMessage ResourceCreate(string type, Resource resource, IFhirService service)
+        public HttpResponseMessage ResourceCreate(string type, Resource resource, IFhirBaseService service)
         {
             if (service != null && !string.IsNullOrEmpty(type) && resource != null)
             {
@@ -56,7 +56,7 @@ namespace FhirStarter.Bonfire.STU3.Service
             }
             return list;
         }
-        public HttpResponseMessage ResourceUpdate(string type, string id, Resource resource, IFhirService service)
+        public HttpResponseMessage ResourceUpdate(string type, string id, Resource resource, IFhirBaseService service)
         {
             if (service == null || string.IsNullOrEmpty(type) || resource == null || string.IsNullOrEmpty(id))
                 throw new ArgumentException("Service is null, cannot update resource of type " + type);
@@ -67,7 +67,7 @@ namespace FhirStarter.Bonfire.STU3.Service
             throw new ArgumentException("Service is null, cannot update resource of type " + type);
         }
 
-        public HttpResponseMessage ResourceDelete(string type, Key key, IFhirService service)
+        public HttpResponseMessage ResourceDelete(string type, Key key, IFhirBaseService service)
         {
             if (service != null)
             {
@@ -76,7 +76,7 @@ namespace FhirStarter.Bonfire.STU3.Service
             throw new ArgumentException("Service is null, cannot update resource of type " + type);
         }
 
-        public HttpResponseMessage ResourcePatch(string type, IKey key, Resource resource, IFhirService service)
+        public HttpResponseMessage ResourcePatch(string type, IKey key, Resource resource, IFhirBaseService service)
         {
             if (service != null)
             {
@@ -85,7 +85,7 @@ namespace FhirStarter.Bonfire.STU3.Service
             throw new ArgumentException("Service is null, cannot update resource of type " + type);
         }
 
-        public IFhirService FindServiceFromList(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, string type)
+        public IFhirBaseService FindServiceFromList(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, string type)
         {
             if (IsMockupEnabled())
             {
@@ -120,7 +120,7 @@ namespace FhirStarter.Bonfire.STU3.Service
            return false;
        }
 
-       private static IFhirService GetMockupService(ICollection<IFhirMockupService> mockupServices, string type)
+       private static IFhirMockupService GetMockupService(ICollection<IFhirMockupService> mockupServices, string type)
        {
            if (mockupServices != null && mockupServices.Any())
            {

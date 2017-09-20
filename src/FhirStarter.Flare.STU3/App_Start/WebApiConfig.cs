@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Web.Cors;
+using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace FhirStarter.Flare.STU3
 {
@@ -6,6 +8,7 @@ namespace FhirStarter.Flare.STU3
     {
         public static void Register(HttpConfiguration config)
         {
+            
             config.EnableCors();
 
             // Web API routes
