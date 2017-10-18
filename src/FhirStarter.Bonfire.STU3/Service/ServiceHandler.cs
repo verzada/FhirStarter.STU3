@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -138,38 +139,44 @@ namespace FhirStarter.Bonfire.STU3.Service
                                        " despite having the EnabledMockup option in AppSettings in the web.config.");
        }
 
-       public CapabilityStatement CreateMetadata(ICollection<IFhirService> services)
+       public CapabilityStatement CreateMetadata(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService, string baseUrl)
         {
-            if (services.Any())
-            {
-                var serviceName = MetaDataName(services);
+            if (!services.Any()) return new CapabilityStatement();
+            var serviceName = MetaDataName(services);
 
-                var fhirVersion = ModelInfo.Version;
+            var fhirVersion = ModelInfo.Version;
 
-                var fhirPublisher = GetFhirPublisher();
-                var fhirDescription = GetFhirDescription();
+            var fhirPublisher = GetFhirPublisher();
+            var fhirDescription = GetFhirDescription();
 
-                var conformance = CapabilityStatementBuilder.CreateServer(serviceName, fhirPublisher, fhirVersion);
+            var conformance = CapabilityStatementBuilder.CreateServer(serviceName, fhirPublisher, fhirVersion);
 
-                //conformance.AddUsedResources(services, false, false,
-                //  CapabilityStatement.ResourceVersionPolicy.VersionedUpdate);
+            //conformance.AddUsedResources(services, false, false,
+            //  CapabilityStatement.ResourceVersionPolicy.VersionedUpdate);
 
-                //conformance.AddSearchSetInteraction().AddSearchTypeInteractionForResources();
-                conformance.AddSearchTypeInteractionForResources();
-                conformance = conformance.AddCoreSearchParamsAllResources(services);
-                conformance = conformance.AddOperationDefintion(services);
+            //conformance.AddSearchSetInteraction().AddSearchTypeInteractionForResources();
+            conformance.AddSearchTypeInteractionForResources();
+            conformance = conformance.AddCoreSearchParamsAllResources(services);
+            conformance = conformance.AddOperationDefintion(services);
 
-                conformance.AcceptUnknown = CapabilityStatement.UnknownContentCode.Both;
-                conformance.Experimental = true;
-                conformance.Format = new[] { "xml", "json" };
-                conformance.Description = new Markdown(fhirDescription); 
+            conformance.AcceptUnknown = CapabilityStatement.UnknownContentCode.Both;
+            conformance.Experimental = true;
+            conformance.Format = new[] { "xml", "json" };
+            conformance.Description = new Markdown(fhirDescription);
 
-                return conformance;
-            }
-            return new CapabilityStatement();
+            conformance.Profile = SetProfiles(fhirStructureDefinitionService);
+                
+            return conformance;
         }
 
-        private static string GetFhirDescription()
+       private static List<ResourceReference> SetProfiles(IFhirStructureDefinitionService fhirStructureDefinitionService)
+       {
+            var structureDefinitions = fhirStructureDefinitionService.GetStructureDefinitions();
+            var profiles = structureDefinitions.Select(structureDefinition => new ResourceReference {Url = new Uri(structureDefinition.Url)}).ToList();
+           return profiles;
+       }
+
+       private static string GetFhirDescription()
         {
             var fhirDescription = WebConfigurationManager.AppSettings["FhirDescription"];
             if (string.IsNullOrEmpty(fhirDescription))
