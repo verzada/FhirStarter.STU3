@@ -36,11 +36,11 @@
     <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.1\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="Hl7.Fhir.Specification.STU3, Version=0.93.4.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hl7.Fhir.Specification.STU3.0.93.4\lib\net45\Hl7.Fhir.Specification.STU3.dll</HintPath>
+    </Reference>
     <Reference Include="Hl7.Fhir.STU3.Core, Version=0.93.5.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.STU3.0.93.5\lib\net45\Hl7.Fhir.STU3.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.Fhir.STU3.Specification, Version=0.93.5.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.Specification.STU3.0.93.5\lib\net45\Hl7.Fhir.STU3.Specification.dll</HintPath>
     </Reference>
     <Reference Include="Hl7.Fhir.Support, Version=0.4.4.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.Support.0.4.4\lib\net45\Hl7.Fhir.Support.dll</HintPath>
@@ -152,6 +152,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="specification.zip">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FhirStarter.Bonfire.STU3\FhirStarter.Bonfire.STU3.csproj">
