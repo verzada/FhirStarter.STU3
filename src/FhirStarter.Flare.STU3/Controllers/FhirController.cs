@@ -74,7 +74,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpGet, Route("StructureDefinition/{nspace}/{id}")]
         public HttpResponseMessage GetStructureDefinition(string nspace, string id)
         {
-            var structureDefinition = Load(id,nspace);
+            var structureDefinition = Load(false, id,nspace);
             if (structureDefinition == null)
                 throw new FhirOperationException($"{nameof(StructureDefinition)} for {nspace}/{id} not found",
                     HttpStatusCode.InternalServerError);
@@ -84,14 +84,14 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpGet, Route("StructureDefinition/{id}")]
         public HttpResponseMessage GetStructureDefinition(string id)
         {
-            var structureDefinition = Load(id);
+            var structureDefinition = Load(false,id);
             if (structureDefinition == null)
                 throw new FhirOperationException($"{nameof(StructureDefinition)} for {id} not found",
                     HttpStatusCode.InternalServerError);
             return SendResponse(structureDefinition);
         }
 
-        private StructureDefinition Load(string id, string nspace = null)
+        private StructureDefinition Load(bool excactMatch, string id, string nspace = null)
         {
             string lookup;
             if (string.IsNullOrEmpty(nspace))
@@ -103,8 +103,8 @@ namespace FhirStarter.Flare.STU3.Controllers
                 lookup = nspace + "/" + id;
             }
             var structureDefinitions = _fhirStructureDefinitionService.GetStructureDefinitions();
-            var structureDefinition = structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
-            return structureDefinition;
+            return excactMatch ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup)) : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
+            
         }
 
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
@@ -147,6 +147,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpPost, Route("{type}")]
         public HttpResponseMessage Create(string type, Resource resource)
         {
+            var xml = FhirSerializer.SerializeToXml(resource);
             var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             
             resource = (Resource) ValidateResource(resource);
@@ -216,7 +217,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             if (!(resource is StructureDefinition))
             {
                 var resourceName = resource.TypeName;
-                var structureDefinition = Load(resourceName);
+                var structureDefinition = Load(true, resourceName);
                 var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
                             resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
                 if (!found)
