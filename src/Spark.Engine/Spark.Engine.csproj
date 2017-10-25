@@ -121,7 +121,6 @@
     <EmbeddedResource Include="Resources.resx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="FhirStarter.Spark.Engine.STU3.nuspec">
       <SubType>Designer</SubType>
     </None>

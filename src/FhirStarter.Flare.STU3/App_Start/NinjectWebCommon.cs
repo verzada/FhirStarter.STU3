@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Text;
 using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
@@ -17,6 +15,7 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Syntax;
 using Ninject.Web.Common;
+using Ninject.Web.Common.WebHost;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -101,7 +100,7 @@ namespace FhirStarter.Flare.STU3
                         BindIFhirServices(kernel, serviceTypes, classType);
                     }
                 }
-                
+
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -109,33 +108,28 @@ namespace FhirStarter.Flare.STU3
             }
 
             CheckForLackingServices();
-           
+
         }
 
-       
-
-       
-        
-
         private static void BindIFhirServices(IBindingRoot kernel, List<TypeInitializer> serviceTypes, Type classType)
-       {
-           var serviceType = FindType(serviceTypes, classType);
-           if (serviceType != null)
-           {
-               if (serviceType.Name.Equals(nameof(IFhirService)))
-               {
-                   var instance = (IFhirService)Activator.CreateInstance(classType);
+        {
+            var serviceType = FindType(serviceTypes, classType);
+            if (serviceType != null)
+            {
+                if (serviceType.Name.Equals(nameof(IFhirService)))
+                {
+                    var instance = (IFhirService)Activator.CreateInstance(classType);
                     kernel.Bind<IFhirService>().ToConstant(instance);
                     _amountOfInitializedIFhirServices++;
                 }
                 else if (serviceType.Name.Equals(nameof(IFhirMockupService)))
-               {
-                   var instance = (IFhirMockupService)Activator.CreateInstance(classType);
-                   kernel.Bind<IFhirMockupService>().ToConstant(instance);
-                   _amountOfInitializedIFhirMockupServices++;
+                {
+                    var instance = (IFhirMockupService)Activator.CreateInstance(classType);
+                    kernel.Bind<IFhirMockupService>().ToConstant(instance);
+                    _amountOfInitializedIFhirMockupServices++;
                 }
-               else if (serviceType.Name.Equals(nameof(IFhirStructureDefinitionService)))
-               {
+                else if (serviceType.Name.Equals(nameof(IFhirStructureDefinitionService)))
+                {
                     var structureDefinitionService = (IFhirStructureDefinitionService)Activator.CreateInstance(classType);
                     kernel.Bind<IFhirStructureDefinitionService>().ToConstant(structureDefinitionService);
                     var validator = structureDefinitionService.GetValidator();
@@ -147,8 +141,7 @@ namespace FhirStarter.Flare.STU3
                     _amountOfIFhirStructureDefinitionsInitialized++;
                 }
             }
-       }
-
+        }
 
         private static TypeInitializer FindType(List<TypeInitializer> serviceTypes, Type classType)
         {
