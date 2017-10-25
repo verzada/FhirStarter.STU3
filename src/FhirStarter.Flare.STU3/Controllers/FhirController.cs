@@ -71,29 +71,40 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         }
 
+        [HttpGet, Route("StructureDefinition/{nspace}/{id}")]
+        public HttpResponseMessage GetStructureDefinition(string nspace, string id)
+        {
+            var structureDefinition = Load(false, id,nspace);
+            if (structureDefinition == null)
+                throw new FhirOperationException($"{nameof(StructureDefinition)} for {nspace}/{id} not found",
+                    HttpStatusCode.InternalServerError);
+            return SendResponse(structureDefinition);
+        }
+
         [HttpGet, Route("StructureDefinition/{id}")]
         public HttpResponseMessage GetStructureDefinition(string id)
         {
-            var structureDefinition = Load(id);
-            if (structureDefinition != null)
-            {
-                return SendResponse(structureDefinition);
-            }
-            throw new FhirOperationException($"{nameof(StructureDefinition)} for {id} not found", HttpStatusCode.InternalServerError);
-            
+            var structureDefinition = Load(false,id);
+            if (structureDefinition == null)
+                throw new FhirOperationException($"{nameof(StructureDefinition)} for {id} not found",
+                    HttpStatusCode.InternalServerError);
+            return SendResponse(structureDefinition);
         }
 
-        private StructureDefinition Load(string id)
+        private StructureDefinition Load(bool excactMatch, string id, string nspace = null)
         {
-            var structureDefinitionNames = _handler.GetStructureDefinitionNames(_fhirServices);
-            if (!structureDefinitionNames.Contains(id))
+            string lookup;
+            if (string.IsNullOrEmpty(nspace))
             {
-                throw new FhirOperationException($"{nameof(StructureDefinition)} {id} not found",
-                    HttpStatusCode.InternalServerError);
+                lookup = id;
+            }
+            else
+            {
+                lookup = nspace + "/" + id;
             }
             var structureDefinitions = _fhirStructureDefinitionService.GetStructureDefinitions();
-            var structureDefinition = structureDefinitions.FirstOrDefault(definition => definition.Name.Equals(id));
-            return structureDefinition;
+            return excactMatch ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup)) : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
+            
         }
 
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
@@ -136,6 +147,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpPost, Route("{type}")]
         public HttpResponseMessage Create(string type, Resource resource)
         {
+            var xml = FhirSerializer.SerializeToXml(resource);
             var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             
             resource = (Resource) ValidateResource(resource);
@@ -199,12 +211,13 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         private Base ValidateResource(Resource resource)
         {
+
             if (_profileValidator == null) return resource;
             if (resource is OperationOutcome) return resource;
             if (!(resource is StructureDefinition))
             {
                 var resourceName = resource.TypeName;
-                var structureDefinition = Load(resourceName);
+                var structureDefinition = Load(true, resourceName);
                 var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
                             resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
                 if (!found)
@@ -212,7 +225,7 @@ namespace FhirStarter.Flare.STU3.Controllers
                     throw new ArgumentException($"Profile for {resourceName} must be set to: {structureDefinition.Url}");
                 }
             }
-            
+
             var resourceAsXDocument = XDocument.Parse(FhirSerializer.SerializeToXml(resource));
             var validationResult = _profileValidator.Validate(resourceAsXDocument.CreateReader(), true);
             if (validationResult.Issue.Count > 0)
@@ -246,7 +259,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             var returnJson = accept.Any(x => x.MediaType.Contains(FhirMediaType.HeaderTypeJson));
 
             StringContent httpContent;
-            var metaData = _handler.CreateMetadata(_fhirServices);
+            var metaData = _handler.CreateMetadata(_fhirServices, _fhirStructureDefinitionService, Request.RequestUri.AbsoluteUri);
             if (!returnJson)
             {
                 var xml = FhirSerializer.SerializeToXml(metaData);
