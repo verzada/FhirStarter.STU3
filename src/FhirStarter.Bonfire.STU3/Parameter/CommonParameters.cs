@@ -33,7 +33,7 @@ namespace FhirStarter.Bonfire.STU3.Parameter
         public static readonly string ParameterRevInclude = "_revinclude";
         #endregion Parameter
 
-        protected CommonParameters(SearchParams parameters)
+        public CommonParameters(SearchParams parameters)
         {
             SetupSearchParameters(parameters);
         }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using FhirStarter.Bonfire.STU3.Interface;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
@@ -10,16 +9,6 @@ namespace FhirStarter.Inferno.Services
     public class ExamplePatientMockupService:IFhirMockupService
     {
         public string GetServiceResourceReference()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public CapabilityStatement.RestComponent GetRestDefinition()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public OperationDefinition GetOperationDefinition()
         {
             throw new System.NotImplementedException();
         }
@@ -50,11 +39,6 @@ namespace FhirStarter.Inferno.Services
         }
 
         public HttpResponseMessage Patch(IKey key, Resource resource)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public ICollection<string> GetStructureDefinitionNames()
         {
             throw new System.NotImplementedException();
         }
