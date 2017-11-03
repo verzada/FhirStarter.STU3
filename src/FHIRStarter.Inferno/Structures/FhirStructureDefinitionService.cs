@@ -25,7 +25,9 @@ namespace FhirStarter.Inferno.Structures
         {
             var enableValidation = ConfigurationManager.AppSettings["EnableValidation"];
             if (enableValidation == null || !Convert.ToBoolean(enableValidation)) return null;
-            var coreSource = new CachedResolver(ZipSource.CreateValidationSource());
+            var baseFolder = AppDomain.CurrentDomain.BaseDirectory + @"\bin";
+            var zipSource = new ZipSource(Path.Combine(baseFolder, "specification.zip"));
+            var coreSource = new CachedResolver(zipSource);
             var combinedSource = new MultiResolver(GetResourceResolver(), coreSource);
             var settings = new ValidationSettings
             {
