@@ -139,7 +139,7 @@ namespace FhirStarter.Bonfire.STU3.Service
                                        " despite having the EnabledMockup option in AppSettings in the web.config.");
        }
 
-       public CapabilityStatement CreateMetadata(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService, string baseUrl)
+       public CapabilityStatement CreateMetadata(ICollection<IFhirService> services, AbstractStructureDefinitionService abstractStructureDefinitionService, string baseUrl)
         {
             if (!services.Any()) return new CapabilityStatement();
             var serviceName = MetaDataName(services);
@@ -164,14 +164,14 @@ namespace FhirStarter.Bonfire.STU3.Service
             conformance.Format = new[] { "xml", "json" };
             conformance.Description = new Markdown(fhirDescription);
 
-            conformance.Profile = SetProfiles(fhirStructureDefinitionService);
+            conformance.Profile = SetProfiles(abstractStructureDefinitionService);
                 
             return conformance;
         }
 
-       private static List<ResourceReference> SetProfiles(IFhirStructureDefinitionService fhirStructureDefinitionService)
+       private static List<ResourceReference> SetProfiles(AbstractStructureDefinitionService abstractStructureDefinitionService)
        {
-            var structureDefinitions = fhirStructureDefinitionService.GetStructureDefinitions();
+            var structureDefinitions = abstractStructureDefinitionService.GetStructureDefinitions();
             var profiles = structureDefinitions.Select(structureDefinition => new ResourceReference {Url = new Uri(structureDefinition.Url)}).ToList();
            return profiles;
        }

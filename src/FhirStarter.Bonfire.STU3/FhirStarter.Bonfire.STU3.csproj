@@ -80,7 +80,7 @@
     <Compile Include="Interface\IFhirBaseService.cs" />
     <Compile Include="Interface\IFhirMockupService.cs" />
     <Compile Include="Interface\IFhirService.cs" />
-    <Compile Include="Interface\IFhirStructureDefinitionService.cs" />
+    <Compile Include="Interface\AbstractStructureDefinitionService.cs" />
     <Compile Include="Log\ExceptionLogger.cs" />
     <Compile Include="Parameter\CommonParameters.cs" />
     <Compile Include="Parameter\OperatorType.cs" />

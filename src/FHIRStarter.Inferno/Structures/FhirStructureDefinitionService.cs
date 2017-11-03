@@ -11,40 +11,26 @@ using Hl7.Fhir.Validation;
 
 namespace FhirStarter.Inferno.Structures
 {
-    public class FhirStructureDefinitionService:IFhirStructureDefinitionService
+    public class FhirStructureDefinitionService:AbstractStructureDefinitionService
     {
         private readonly string _structureDefinitionsFolder = AppDomain.CurrentDomain.BaseDirectory + @"bin\Resources\StructureDefinitions";
-
-        public ICollection<StructureDefinition> GetStructureDefinitions()
+        
+        public override ICollection<StructureDefinition> GetStructureDefinitions()
         {
             var structureDefinitionFiles = Directory.GetFiles(_structureDefinitionsFolder);
             return structureDefinitionFiles.Select(File.ReadAllText).Select(content => new FhirXmlParser().Parse<StructureDefinition>(content)).ToList();
         }
 
-        public Validator GetValidator()
-        {
-            var enableValidation = ConfigurationManager.AppSettings["EnableValidation"];
-            if (enableValidation == null || !Convert.ToBoolean(enableValidation)) return null;
-            var baseFolder = AppDomain.CurrentDomain.BaseDirectory + @"\bin";
-            var zipSource = new ZipSource(Path.Combine(baseFolder, "specification.zip"));
-            var coreSource = new CachedResolver(zipSource);
-            var combinedSource = new MultiResolver(GetResourceResolver(), coreSource);
-            var settings = new ValidationSettings
-            {
-                EnableXsdValidation = true,
-                GenerateSnapshot = true,
-                Trace = true,
-                ResourceResolver = combinedSource,
-                ResolveExteralReferences = true,
-                SkipConstraintValidation = false
-            };
-            return new Validator(settings);
-        }
-
-        private IResourceResolver GetResourceResolver()
+        protected override IResourceResolver GetResourceResolver()
         {
             var cachedResolver = new CachedResolver(new DirectorySource(_structureDefinitionsFolder, true));
             return cachedResolver;
+        }
+
+        protected override bool IsValidationOn()
+        {
+            var enableValidation = ConfigurationManager.AppSettings["EnableValidation"];
+            return enableValidation != null && Convert.ToBoolean(enableValidation);
         }
     }
 }

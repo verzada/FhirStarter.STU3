@@ -27,36 +27,36 @@ namespace FhirStarter.Flare.STU3.Controllers
     {
         private readonly ICollection<IFhirService> _fhirServices;
         private readonly ICollection<IFhirMockupService> _fhirMockupServices;
-        private readonly IFhirStructureDefinitionService _fhirStructureDefinitionService;
+        private readonly AbstractStructureDefinitionService _abstractStructureDefinitionService;
         private readonly ServiceHandler _handler = new ServiceHandler();
         private readonly ProfileValidator _profileValidator;
 
-        public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, ProfileValidator profileValidator, IFhirStructureDefinitionService fhirStructureDefinitionService)
+        public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, ProfileValidator profileValidator, AbstractStructureDefinitionService abstractStructureDefinitionService)
         {
             _fhirServices = services;
             _fhirMockupServices = mockupServices;
             _profileValidator = profileValidator;
-            _fhirStructureDefinitionService = fhirStructureDefinitionService;
+            _abstractStructureDefinitionService = abstractStructureDefinitionService;
         }
 
-        public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator, IFhirStructureDefinitionService fhirStructureDefinitionService)
+        public FhirController(ICollection<IFhirService> services, ProfileValidator profileValidator, AbstractStructureDefinitionService abstractStructureDefinitionService)
         {
             _fhirServices = services;
             _profileValidator = profileValidator;
-            _fhirStructureDefinitionService = fhirStructureDefinitionService;
+            _abstractStructureDefinitionService = abstractStructureDefinitionService;
         }
 
-        public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, IFhirStructureDefinitionService fhirStructureDefinitionService)
+        public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, AbstractStructureDefinitionService abstractStructureDefinitionService)
         {
             _fhirServices = services;
             _fhirMockupServices = mockupServices;
-            _fhirStructureDefinitionService = fhirStructureDefinitionService;
+            _abstractStructureDefinitionService = abstractStructureDefinitionService;
         }
 
-        public FhirController(ICollection<IFhirService> services, IFhirStructureDefinitionService fhirStructureDefinitionService)
+        public FhirController(ICollection<IFhirService> services, AbstractStructureDefinitionService abstractStructureDefinitionService)
         {
             _fhirServices = services;
-            _fhirStructureDefinitionService = fhirStructureDefinitionService;
+            _abstractStructureDefinitionService = abstractStructureDefinitionService;
         }
 
         public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices)
@@ -102,7 +102,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             {
                 lookup = nspace + "/" + id;
             }
-            var structureDefinitions = _fhirStructureDefinitionService.GetStructureDefinitions();
+            var structureDefinitions = _abstractStructureDefinitionService.GetStructureDefinitions();
             return excactMatch ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup)) : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
             
         }
@@ -263,7 +263,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             var returnJson = accept.Any(x => x.MediaType.Contains(FhirMediaType.HeaderTypeJson));
 
             StringContent httpContent;
-            var metaData = _handler.CreateMetadata(_fhirServices, _fhirStructureDefinitionService, Request.RequestUri.AbsoluteUri);
+            var metaData = _handler.CreateMetadata(_fhirServices, _abstractStructureDefinitionService, Request.RequestUri.AbsoluteUri);
             if (!returnJson)
             {
                 var xml = FhirSerializer.SerializeToXml(metaData);

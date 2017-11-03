@@ -83,13 +83,13 @@ namespace FhirStarter.Flare.STU3
             {
                 var mockupService = typeof(IFhirMockupService);
                 var fhirService = typeof(IFhirService);
-                var fhirStructureDefinition = typeof(IFhirStructureDefinitionService);
+                var fhirStructureDefinition = typeof(AbstractStructureDefinitionService);
                 //var typesToEnable = new List<TypeInitializer> {mockupService, fhirService, fhirStructureDefinition};
                 var serviceTypes = new List<TypeInitializer>
                 {
                     new TypeInitializer(false, mockupService, nameof(IFhirMockupService)),
                     new TypeInitializer(true, fhirService, nameof(IFhirService)),
-                    new TypeInitializer(true, fhirStructureDefinition, nameof(IFhirStructureDefinitionService))
+                    new TypeInitializer(true, fhirStructureDefinition, nameof(AbstractStructureDefinitionService))
                 };
 
                 var serviceAssemblies = AssemblyLoaderHelper.GetFhirServiceAssemblies();
@@ -128,10 +128,10 @@ namespace FhirStarter.Flare.STU3
                     kernel.Bind<IFhirMockupService>().ToConstant(instance);
                     _amountOfInitializedIFhirMockupServices++;
                 }
-                else if (serviceType.Name.Equals(nameof(IFhirStructureDefinitionService)))
+                else if (serviceType.Name.Equals(nameof(AbstractStructureDefinitionService)))
                 {
-                    var structureDefinitionService = (IFhirStructureDefinitionService)Activator.CreateInstance(classType);
-                    kernel.Bind<IFhirStructureDefinitionService>().ToConstant(structureDefinitionService);
+                    var structureDefinitionService = (AbstractStructureDefinitionService)Activator.CreateInstance(classType);
+                    kernel.Bind<AbstractStructureDefinitionService>().ToConstant(structureDefinitionService);
                     var validator = structureDefinitionService.GetValidator();
                     if (validator != null)
                     {
@@ -168,7 +168,7 @@ namespace FhirStarter.Flare.STU3
             }
             if (_amountOfIFhirStructureDefinitionsInitialized == 0)
             {
-                const string structureDefinitionErrorMessage = "Class(es) using " + nameof(IFhirStructureDefinitionService) +
+                const string structureDefinitionErrorMessage = "Class(es) using " + nameof(AbstractStructureDefinitionService) +
                                                                " was not found in any of the dlls used by the web service. In order for " +
                                                                nameof(StructureDefinition) +
                                                                "s to be availble, please implement a class using the interface which defines where the " +
@@ -178,7 +178,7 @@ namespace FhirStarter.Flare.STU3
             }
             if (_amountOfIFhirStructureDefinitionsInitialized != 1)
             {
-                const string structureDefinitionErrorMessage = "Class(es) using " + nameof(IFhirStructureDefinitionService) +
+                const string structureDefinitionErrorMessage = "Class(es) using " + nameof(AbstractStructureDefinitionService) +
                                                                " was found more than once. In order for " +
                                                                nameof(StructureDefinition) +
                                                                "s to be available, please implement only one class using the interface which defines where the " +
@@ -216,8 +216,8 @@ namespace FhirStarter.Flare.STU3
             }
             else
             {
-                var structureDefinitionService = (IFhirStructureDefinitionService)Activator.CreateInstance(classType);
-                kernel.Bind<IFhirStructureDefinitionService>().ToConstant(structureDefinitionService);
+                var structureDefinitionService = (AbstractStructureDefinitionService)Activator.CreateInstance(classType);
+                kernel.Bind<AbstractStructureDefinitionService>().ToConstant(structureDefinitionService);
                 var validator = structureDefinitionService.GetValidator();
                 if (validator != null)
                 {

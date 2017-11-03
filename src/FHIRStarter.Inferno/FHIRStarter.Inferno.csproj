@@ -204,6 +204,7 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <Content Include="specification.zip" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
