@@ -46,12 +46,6 @@
     <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.1.2\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
-    <Reference Include="FhirStarter.Bonfire.STU3, Version=0.9.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Bonfire.STU3.0.9.24\lib\net452\FhirStarter.Bonfire.STU3.dll</HintPath>
-    </Reference>
-    <Reference Include="FhirStarter.Flare.STU3, Version=0.9.26.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Flare.STU3.0.9.26\lib\net452\FhirStarter.Flare.STU3.dll</HintPath>
-    </Reference>
     <Reference Include="Hl7.Fhir.STU3.Core, Version=0.93.5.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.STU3.0.93.5\lib\net45\Hl7.Fhir.STU3.Core.dll</HintPath>
     </Reference>
@@ -240,6 +234,16 @@
     <Folder Include="App_Data\" />
     <Folder Include="Mapper\" />
     <Folder Include="Profile\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FhirStarter.Bonfire.STU3\FhirStarter.Bonfire.STU3.csproj">
+      <Project>{874d24e0-90dc-49f3-a927-196159b8241f}</Project>
+      <Name>FhirStarter.Bonfire.STU3</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FhirStarter.Flare.STU3\FhirStarter.Flare.STU3.csproj">
+      <Project>{03713bd1-307f-4fb7-ac11-26cde4d3e5d7}</Project>
+      <Name>FhirStarter.Flare.STU3</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
