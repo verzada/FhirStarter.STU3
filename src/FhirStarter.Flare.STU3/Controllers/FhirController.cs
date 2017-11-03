@@ -214,16 +214,20 @@ namespace FhirStarter.Flare.STU3.Controllers
 
             if (_profileValidator == null) return resource;
             if (resource is OperationOutcome) return resource;
-            if (!(resource is StructureDefinition))
+            
             {
                 var resourceName = resource.TypeName;
                 var structureDefinition = Load(true, resourceName);
-                var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
-                            resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
-                if (!found)
+                if (structureDefinition != null)
                 {
-                    throw new ArgumentException($"Profile for {resourceName} must be set to: {structureDefinition.Url}");
+                    var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
+                                resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
+                    if (!found)
+                    {
+                        throw new ArgumentException($"Profile for {resourceName} must be set to: {structureDefinition.Url}");
+                    }
                 }
+                
             }
 
             var resourceAsXDocument = XDocument.Parse(FhirSerializer.SerializeToXml(resource));
