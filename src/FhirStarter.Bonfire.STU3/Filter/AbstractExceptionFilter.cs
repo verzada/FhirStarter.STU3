@@ -33,6 +33,9 @@ namespace FhirStarter.Bonfire.STU3.Filter
             var outCome = operationOutcome ?? GetOperationOutCome(context.Exception);
 
             var xml = FhirSerializer.SerializeResourceToXml(outCome);
+            var internalOutCome = new FhirXmlParser().Parse<OperationOutcome>(xml);
+            internalOutCome.Issue[0].Diagnostics = context.Exception.StackTrace;
+            xml = FhirSerializer.SerializeResourceToXml(internalOutCome);
             var xmlDoc = XDocument.Parse(xml);
             var error = xmlDoc.ToString();
             var htmlDecode = WebUtility.HtmlDecode(error);
