@@ -45,6 +45,7 @@ namespace FhirStarter.UnitTests.Validation
         }
 
         [TestCase("ValidPatient.xml")]
+        [Ignore("Not in use")]
         public void TestValidatePatientResponse(string xmlResource)
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -64,7 +65,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(patient);
 
-            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(patient, true, true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
 
@@ -88,7 +89,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(diagnosticReport);
 
-            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(diagnosticReport, true, true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
 
@@ -112,7 +113,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(medicationStatement);
 
-            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(medicationStatement, true, true);
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
 
@@ -136,7 +137,7 @@ namespace FhirStarter.UnitTests.Validation
             }
             Assert.IsNotNull(bundle);
 
-            var validResource = _profileValidator.Validate(xDocument.CreateReader(), true);
+            var validResource = _profileValidator.Validate(bundle);
             Console.WriteLine(XDocument.Parse(FhirSerializer.SerializeToXml(validResource)).ToString());
             Assert.AreEqual(0, validResource.Issue.Count, "Should not get an operation outcome");
         }

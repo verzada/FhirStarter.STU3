@@ -231,7 +231,7 @@ namespace FhirStarter.Flare.STU3.Controllers
             }
 
             var resourceAsXDocument = XDocument.Parse(FhirSerializer.SerializeToXml(resource));
-            var validationResult = _profileValidator.Validate(resourceAsXDocument.CreateReader(), true);
+            var validationResult = _profileValidator.Validate(resource, true, true);
             if (validationResult.Issue.Count > 0)
             {
                 resource = validationResult;
