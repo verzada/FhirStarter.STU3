@@ -1,0 +1,4 @@
+﻿<Bundle xmlns="http://hl7.org/fhir">
+  <type value="searchset" />
+  <total value="0" />  
+</Bundle>

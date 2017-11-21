@@ -117,17 +117,17 @@ namespace FhirStarter.UnitTests.Validation
             Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
         }
 
-        [TestCase("BundleWithMedicationStatement.xml")]
+        //[TestCase("BundleWithMedicationStatement.xml")]
+        [TestCase("EmptyBundleWithMedicationStatement.xml")]
         public void TestValidateBundleMedicationStatement(string xmlResource)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var names = assembly.GetManifestResourceNames();
             Bundle bundle = null;
             var item = names.FirstOrDefault(t => t.EndsWith(xmlResource));
-            XDocument xDocument = null;
             if (item != null)
             {
-
+                XDocument xDocument;
                 using (var stream = assembly.GetManifestResourceStream(item))
                 {
                     xDocument = XDocument.Load(stream);

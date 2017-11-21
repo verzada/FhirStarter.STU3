@@ -54,26 +54,38 @@ namespace FhirStarter.Bonfire.STU3.Validation
                     itemsRun.Add(item.Resource.TypeName);
                 }
             }
+            RunSerialValidation(onlyErrors, serialItems, operationOutcome);
+            RunParallellValidation(onlyErrors, parallellItems, operationOutcome);
+            //TODO: Validering av selve bundlen
+            return operationOutcome;
+        }
+
+        private static void RunParallellValidation(bool onlyErrors, List<Resource> parallellItems, OperationOutcome operationOutcome)
+        {
+            if (parallellItems.Count > 0)
+            {
+                Parallel.ForEach(parallellItems, new ParallelOptions {MaxDegreeOfParallelism = parallellItems.Count},
+                    loopedResource =>
+                    {
+                        using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(loopedResource))
+                            .CreateReader())
+                        {
+                            var localOperationOutCome = RunValidation(onlyErrors, reader);
+
+                            operationOutcome.Issue.AddRange(localOperationOutCome.Issue);
+                        }
+                    });
+            }
+        }
+
+        private static void RunSerialValidation(bool onlyErrors, List<Resource> serialItems, OperationOutcome operationOutcome)
+        {
             foreach (var item in serialItems)
             {
                 var localOperationOutCome = RunValidation(onlyErrors,
                     XDocument.Parse(FhirSerializer.SerializeResourceToXml(item)).CreateReader());
                 operationOutcome.Issue.AddRange(localOperationOutCome.Issue);
             }
-
-            Parallel.ForEach(parallellItems, new ParallelOptions {MaxDegreeOfParallelism = parallellItems.Count},
-                loopedResource =>
-                {
-                    using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(loopedResource)).CreateReader())
-                    {
-                        var localOperationOutCome = RunValidation(onlyErrors, reader);
-
-                        operationOutcome.Issue.AddRange(localOperationOutCome.Issue);
-                    }
-                });
-
-            //TODO: Validering av selve bundlen
-            return operationOutcome;
         }
 
         private static OperationOutcome RunValidation(bool onlyErrors, XmlReader reader)
