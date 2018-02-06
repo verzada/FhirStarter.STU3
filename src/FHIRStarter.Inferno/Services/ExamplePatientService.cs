@@ -164,7 +164,7 @@ namespace FhirStarter.Inferno.Services
         public Base Read(SearchParams searchParams)
         {
             var parameters = searchParams.Parameters;
-
+            var xmlSerializer = new FhirXmlSerializer();
             foreach (var parameter in parameters)
             {
                 if (parameter.Item1.ToLower().Contains("log") && parameter.Item2.ToLower().Contains("normal"))
@@ -184,7 +184,9 @@ namespace FhirStarter.Inferno.Services
                     };
                     operationOutcome.Issue.Add(issue);
                     //var errorMessage = fh
-                    var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
+                    
+                    //var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
+                    var serialized = xmlSerializer.SerializeToString(operationOutcome);
                     throw new ArgumentException(serialized);
                 }
             }

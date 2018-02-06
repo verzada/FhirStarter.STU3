@@ -220,7 +220,11 @@ namespace Spark.Engine.Service.FhirServiceExtensions
 
         public static string ConformanceToXML(this CapabilityStatement conformance)
         {
-            return FhirSerializer.SerializeResourceToXml(conformance);
+            var xmlSerializer = new FhirXmlSerializer();
+            //var xml = FhirSerializer.SerializeResourceToXml(resource, summary);
+            var xml = xmlSerializer.SerializeToString(conformance);
+            //   return FhirSerializer.SerializeResourceToXml(conformance);
+            return xml;
         }
 
     }

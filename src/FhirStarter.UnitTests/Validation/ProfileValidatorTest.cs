@@ -26,7 +26,12 @@ namespace FhirStarter.UnitTests.Validation
             var directoryInfo = new FileInfo(location.AbsolutePath).Directory;
             Debug.Assert(directoryInfo != null, "directoryInfo != null");
             Debug.Assert(directoryInfo.FullName != null, "directoryInfo.FullName != null");
-            var cachedResolver = new CachedResolver(new DirectorySource(directoryInfo.FullName + @"\Resources\StructureDefinitions", includeSubdirectories: true));
+
+            var structureDefinitions = directoryInfo.FullName + @"\Resources\StructureDefinitions";
+            var includeSubDirectories = new DirectorySourceSettings { IncludeSubDirectories = true };
+            var directorySource = new DirectorySource(structureDefinitions, includeSubDirectories);
+
+            var cachedResolver = new CachedResolver(directorySource);
             var coreSource = new CachedResolver(ZipSource.CreateValidationSource());            
             var combinedSource = new MultiResolver(cachedResolver, coreSource);
             var settings = new ValidationSettings
@@ -66,7 +71,8 @@ namespace FhirStarter.UnitTests.Validation
             Assert.IsNotNull(patient);
 
             var validResource = _profileValidator.Validate(patient, true, true);
-            Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
+            var xmlSerializer = new FhirXmlSerializer();
+            Console.WriteLine(xmlSerializer.SerializeToString(validResource));
         }
 
         [TestCase("DiagnosticReport.xml")]
@@ -90,7 +96,8 @@ namespace FhirStarter.UnitTests.Validation
             Assert.IsNotNull(diagnosticReport);
 
             var validResource = _profileValidator.Validate(diagnosticReport, true, true);
-            Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
+            var xmlSerializer = new FhirXmlSerializer();
+            Console.WriteLine(xmlSerializer.SerializeToString(validResource));
         }
 
         [TestCase("MedicationStatement.xml")]
@@ -114,7 +121,8 @@ namespace FhirStarter.UnitTests.Validation
             Assert.IsNotNull(medicationStatement);
 
             var validResource = _profileValidator.Validate(medicationStatement, true, true);
-            Console.WriteLine(FhirSerializer.SerializeToXml(validResource));
+            var xmlSerializer = new FhirXmlSerializer();
+            Console.WriteLine(xmlSerializer.SerializeToString(validResource));
         }
 
         //[TestCase("BundleWithMedicationStatement.xml")]
@@ -138,7 +146,8 @@ namespace FhirStarter.UnitTests.Validation
             Assert.IsNotNull(bundle);
 
             var validResource = _profileValidator.Validate(bundle);
-            Console.WriteLine(XDocument.Parse(FhirSerializer.SerializeToXml(validResource)).ToString());
+            var xmlSerializer = new FhirXmlSerializer();
+            Console.WriteLine(XDocument.Parse(xmlSerializer.SerializeToString(validResource)).ToString());
             Assert.AreEqual(0, validResource.Issue.Count, "Should not get an operation outcome");
         }
     }

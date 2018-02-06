@@ -23,7 +23,11 @@ namespace FhirStarter.Inferno.Template.Structures
 
         protected override IResourceResolver GetResourceResolver()
         {
-            var cachedResolver = new CachedResolver(new DirectorySource(_structureDefinitionsFolder, true));
+            var structureDefinitions = _structureDefinitionsFolder;
+            var includeSubDirectories = new DirectorySourceSettings { IncludeSubDirectories = true };
+            var directorySource = new DirectorySource(structureDefinitions, includeSubDirectories);
+
+            var cachedResolver = new CachedResolver(directorySource);
             return cachedResolver;
         }
 

@@ -68,23 +68,26 @@ namespace Spark.Engine.Formatters
                 using (JsonWriter writer = new JsonTextWriter(streamwriter))
                 {
                     var summary = RequestMessage.RequestSummary();
+                    var jsonSerializer = new FhirJsonSerializer();
 
                     if (type == typeof(OperationOutcome))
                     {
                         Resource resource = (Resource)value;
-                        FhirSerializer.SerializeResource(resource, writer);
+                        //FhirSerializer.SerializeResource(resource, writer);
+                        jsonSerializer.Serialize(resource,writer);
                     }
                     else if (typeof(Resource).IsAssignableFrom(type))
                     {
                         var resource = (Resource)value;
-                        FhirSerializer.SerializeResource(resource, writer);
+                        //FhirSerializer.SerializeResource(resource, writer);
+                        jsonSerializer.Serialize(resource, writer);
                     }
                     else if (typeof(FhirResponse).IsAssignableFrom(type))
                     {
-                        var response = value as FhirResponse;
-                        if (response != null && response.HasBody)
+                        if (value is FhirResponse response && response.HasBody)
                         {
-                            FhirSerializer.SerializeResource(response.Resource, writer, summary);
+                            //FhirSerializer.SerializeResource(response.Resource, writer, summary);
+                            jsonSerializer.Serialize(response.Resource, writer, summary);
                         }
                     }
                   

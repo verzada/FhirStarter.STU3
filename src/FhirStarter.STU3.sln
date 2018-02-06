@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spark.Engine", "Spark.Engine\Spark.Engine.csproj", "{73D29C45-01B7-4B14-95F1-D5B6DEA77404}"
 EndProject
@@ -61,5 +61,8 @@ Global
 		{03713BD1-307F-4FB7-AC11-26CDE4D3E5D7} = {BE178F67-24BA-4158-A305-8AF90D0C8DF8}
 		{38558833-B7C7-4D3C-A4E6-CB39F7F098EC} = {1A1E22C5-1227-4136-B3B5-7D5EF1352EF8}
 		{9B289869-BF04-486D-A8E5-D72D991C4E8E} = {888F83B2-C1E2-43E2-88A6-4A4C0F5CF887}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ADA7BD97-BE94-4113-B2A7-A04F2DB97B1A}
 	EndGlobalSection
 EndGlobal

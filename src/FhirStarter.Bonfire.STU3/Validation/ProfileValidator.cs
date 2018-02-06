@@ -26,7 +26,9 @@ namespace FhirStarter.Bonfire.STU3.Validation
             
             if (!(resource is Bundle) || !threadedValidation)
             {
-                using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(resource)).CreateReader())
+                var xmlSerializer = new FhirXmlSerializer();
+                //    using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(resource)).CreateReader())
+                using (var reader = XDocument.Parse(xmlSerializer.SerializeToString(resource)).CreateReader())
                 {
                     return RunValidation(onlyErrors, reader);
                 }
@@ -62,13 +64,16 @@ namespace FhirStarter.Bonfire.STU3.Validation
 
         private static void RunParallellValidation(bool onlyErrors, List<Resource> parallellItems, OperationOutcome operationOutcome)
         {
+            var xmlSerializer = new FhirXmlSerializer();
             if (parallellItems.Count > 0)
             {
                 Parallel.ForEach(parallellItems, new ParallelOptions {MaxDegreeOfParallelism = parallellItems.Count},
                     loopedResource =>
                     {
-                        using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(loopedResource))
-                            .CreateReader())
+                      
+                        //using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(loopedResource))
+                        using (var reader = XDocument.Parse(xmlSerializer.SerializeToString(loopedResource))
+                   .CreateReader())
                         {
                             var localOperationOutCome = RunValidation(onlyErrors, reader);
 
@@ -80,10 +85,12 @@ namespace FhirStarter.Bonfire.STU3.Validation
 
         private static void RunSerialValidation(bool onlyErrors, List<Resource> serialItems, OperationOutcome operationOutcome)
         {
+            var xmlSerializer = new FhirXmlSerializer();
             foreach (var item in serialItems)
             {
                 var localOperationOutCome = RunValidation(onlyErrors,
-                    XDocument.Parse(FhirSerializer.SerializeResourceToXml(item)).CreateReader());
+                //   XDocument.Parse(FhirSerializer.SerializeResourceToXml(item)).CreateReader());
+                    XDocument.Parse(xmlSerializer.SerializeToString(item)).CreateReader());
                 operationOutcome.Issue.AddRange(localOperationOutCome.Issue);
             }
         }

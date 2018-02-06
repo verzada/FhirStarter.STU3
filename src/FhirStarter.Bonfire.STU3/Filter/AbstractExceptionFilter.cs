@@ -32,10 +32,13 @@ namespace FhirStarter.Bonfire.STU3.Filter
             }
             var outCome = operationOutcome ?? GetOperationOutCome(context.Exception);
 
-            var xml = FhirSerializer.SerializeResourceToXml(outCome);
+            var xmlSerializer = new FhirXmlSerializer();
+            var xml = xmlSerializer.SerializeToString(outCome);
+
+           // var xml = FhirSerializer.SerializeResourceToXml(outCome);
             var internalOutCome = new FhirXmlParser().Parse<OperationOutcome>(xml);
             internalOutCome.Issue[0].Diagnostics = context.Exception.StackTrace;
-            xml = FhirSerializer.SerializeResourceToXml(internalOutCome);
+            xml = xmlSerializer.SerializeToString(internalOutCome);
             var xmlDoc = XDocument.Parse(xml);
             var error = xmlDoc.ToString();
             var htmlDecode = WebUtility.HtmlDecode(error);
@@ -48,10 +51,12 @@ namespace FhirStarter.Bonfire.STU3.Filter
             // "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
             var acceptEntry = HttpContext.Current.Request.Headers["Accept"];
             var acceptJson = acceptEntry.Contains(FhirMediaType.HeaderTypeJson);
-
+            var jsonSerializer = new FhirJsonSerializer();
+            var xmlSerializer = new FhirXmlSerializer();
             if (acceptJson)
             {
-                var json = FhirSerializer.SerializeToJson(outCome);
+                //var json = FhirSerializer.SerializeToJson(outCome);
+                var json = jsonSerializer.SerializeToString(outCome);
                 context.Response = new HttpResponseMessage
                 {
                     Content = new StringContent(json, Encoding.UTF8, FhirMediaType.JsonResource),
@@ -60,7 +65,8 @@ namespace FhirStarter.Bonfire.STU3.Filter
             }
             else
             {
-                var xml = FhirSerializer.SerializeToXml(outCome);
+                //var xml = FhirSerializer.SerializeToXml(outCome);
+                var xml = xmlSerializer.SerializeToString(outCome);
                 context.Response = new HttpResponseMessage
                 {
                     Content = new StringContent(xml, Encoding.UTF8, FhirMediaType.XmlResource),

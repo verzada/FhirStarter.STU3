@@ -81,22 +81,25 @@ namespace Spark.Engine.Formatters
             {
                 XmlWriter writer = new XmlTextWriter(writeStream, new UTF8Encoding(false));
                 var summary = RequestMessage.RequestSummary();
+                var xmlSerializer = new FhirXmlSerializer();
 
                 if (type == typeof(OperationOutcome)) 
                 {
                     var resource = (Resource)value;
-                    FhirSerializer.SerializeResource(resource, writer, summary);
+                   // FhirSerializer.SerializeResource(resource, writer, summary);
+                    xmlSerializer.Serialize(resource, writer, summary);
                 }
                 else if (typeof(Resource).IsAssignableFrom(type))
                 {
                     var resource = (Resource)value;
-                    FhirSerializer.SerializeResource(resource, writer, summary);
+                    //FhirSerializer.SerializeResource(resource, writer, summary);
+                    xmlSerializer.Serialize(resource, writer, summary);
                 }
                 else if (type == typeof(FhirResponse))
                 {
-                    var response = value as FhirResponse;
-                    if (response != null && response.HasBody) {
-                        FhirSerializer.SerializeResource(response.Resource, writer, summary);
+                    if (value is FhirResponse response && response.HasBody) {
+                        //FhirSerializer.SerializeResource(response.Resource, writer, summary);
+                        xmlSerializer.Serialize(response.Resource, writer, summary);
                     }
                 }
                 

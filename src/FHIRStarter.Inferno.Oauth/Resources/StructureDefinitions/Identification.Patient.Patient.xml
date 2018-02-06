@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://hl7.org/fhir file:///C:/Work/code/fhir-schemas/STU3/fhir-all-xsd-stu3/structuredefinition.xsd">
+  <meta>
+    <lastUpdated value="2017-06-20T15:04:39.696+02:00"/>
+  </meta>
+  <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-wg">
+    <valueCode value="pa"/>
+  </extension>
+  <url value="http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient"/>
+  <name value="Patient"/>
+  <status value="draft"/>
+  <date value="2017-06-13T13:00:03.5581868+02:00"/>
+  <fhirVersion value="3.0.0"/>
+  <kind value="resource"/>
+  <abstract value="false"/>
+  <type value="Patient"/>
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Patient"/>
+  <derivation value="constraint"/>
+  <differential>
+    <element>
+      <path value="Patient.identifier.type"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.identifier.period"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.identifier.assigner"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.name.prefix"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.name.suffix"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.name.period"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.telecom"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.address.type"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.address.text"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.address.district"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.address.period"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.maritalStatus"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.multipleBirth[x]"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.photo"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.relationship.coding.version"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable">
+        <valueBoolean value="true"/>
+      </extension>
+      <path value="Patient.contact.relationship.coding.display"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.relationship.coding.userSelected"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/elementdefinition-translatable">
+        <valueBoolean value="true"/>
+      </extension>
+      <path value="Patient.contact.relationship.text"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.name.prefix"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.name.suffix"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.name.period"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.telecom.use"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.telecom.rank"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.telecom.period"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.address"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.gender"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.contact.organization"/>
+      <type>
+        <code value="Reference"/>
+        <profile value="http://helse-nord.no/FHIR/profiles/Clinical.Organization/Organization"/>
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Organization"/>
+        <aggregation value="contained"/>
+      </type>
+    </element>
+    <element>
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Animal"/>
+      </extension>
+      <path value="Patient.animal"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.communication"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.generalPractitioner"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.managingOrganization"/>
+      <max value="0"/>
+    </element>
+    <element>
+      <path value="Patient.link"/>
+      <max value="0"/>
+    </element>
+  </differential>
+</StructureDefinition>

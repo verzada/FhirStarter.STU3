@@ -147,7 +147,8 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpPost, Route("{type}")]
         public HttpResponseMessage Create(string type, Resource resource)
         {
-            var xml = FhirSerializer.SerializeToXml(resource);
+            var xmlSerializer = new FhirXmlSerializer();
+            var xml =xmlSerializer.SerializeToString(resource);
             var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             
             resource = (Resource) ValidateResource(resource);
@@ -181,7 +182,6 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         private HttpResponseMessage SendResponse(Base resource)
         {
-           
             var headers = Request.Headers;
             var accept = headers.Accept;
             var returnJson = ReturnJson(accept);
@@ -194,15 +194,21 @@ namespace FhirStarter.Flare.STU3.Controllers
             StringContent httpContent;
             if (!returnJson)
             {
-                var xml = FhirSerializer.SerializeToXml(resource);
+                var xmlSerializer = new FhirXmlSerializer();
+
+                // var xml = FhirSerializer.SerializeToXml(resource);
+                var xml = xmlSerializer.SerializeToString(resource);
                 httpContent =
                     new StringContent(xml, Encoding.UTF8,
                      FhirMediaType.XmlResource);
             }
             else
             {
+                var jsonSerializer = new FhirJsonSerializer();
+
                 httpContent =
-                    new StringContent(FhirSerializer.SerializeToJson(resource), Encoding.UTF8,
+                      //  new StringContent(FhirSerializer.SerializeToJson(resource), Encoding.UTF8,
+                    new StringContent(jsonSerializer.SerializeToString(resource), Encoding.UTF8,
                      FhirMediaType.JsonResource);
             }
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = httpContent };
@@ -265,15 +271,18 @@ namespace FhirStarter.Flare.STU3.Controllers
             var metaData = _handler.CreateMetadata(_fhirServices, _abstractStructureDefinitionService, Request.RequestUri.AbsoluteUri);
             if (!returnJson)
             {
-                var xml = FhirSerializer.SerializeToXml(metaData);
+                var xmlSerializer = new FhirXmlSerializer();
+                var xml = xmlSerializer.SerializeToString(metaData);
                 httpContent =
                     new StringContent(xml, Encoding.UTF8,
                         "application/xml");
             }
             else
             {
+                var jsonSerializer = new FhirJsonSerializer();
+                var json = jsonSerializer.SerializeToString(metaData);
                 httpContent =
-                    new StringContent(FhirSerializer.SerializeToJson(metaData), Encoding.UTF8,
+                    new StringContent(json, Encoding.UTF8,
                         "application/json");
             }
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = httpContent };

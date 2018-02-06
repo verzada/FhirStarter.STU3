@@ -184,7 +184,9 @@ namespace FhirStarter.Inferno.Template.Services
                     };
                     operationOutcome.Issue.Add(issue);
                     //var errorMessage = fh
-                    var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
+                    var xmlSerializer = new FhirXmlSerializer();
+                    //var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
+                    var serialized = xmlSerializer.SerializeToString(operationOutcome);
                     throw new ArgumentException(serialized);
                 }
             }
