@@ -45,6 +45,12 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="FhirStarter.Bonfire.STU3, Version=0.9.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Bonfire.STU3.0.9.30\lib\net452\FhirStarter.Bonfire.STU3.dll</HintPath>
+    </Reference>
+    <Reference Include="FhirStarter.Flare.STU3, Version=0.9.32.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Flare.STU3.0.9.32\lib\net452\FhirStarter.Flare.STU3.dll</HintPath>
+    </Reference>
     <Reference Include="Hl7.Fhir.STU3.Core, Version=0.94.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.STU3.0.94.0\lib\net45\Hl7.Fhir.STU3.Core.dll</HintPath>
     </Reference>
@@ -243,16 +249,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Mapper\" />
     <Folder Include="Profile\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FhirStarter.Bonfire.STU3\FhirStarter.Bonfire.STU3.csproj">
-      <Project>{874d24e0-90dc-49f3-a927-196159b8241f}</Project>
-      <Name>FhirStarter.Bonfire.STU3</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FhirStarter.Flare.STU3\FhirStarter.Flare.STU3.csproj">
-      <Project>{03713bd1-307f-4fb7-ac11-26cde4d3e5d7}</Project>
-      <Name>FhirStarter.Flare.STU3</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
