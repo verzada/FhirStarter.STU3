@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Filters;
 using System.Xml.Linq;
+using FhirStarter.Bonfire.STU3.Exceptions;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Spark.Engine.Core;
@@ -31,11 +32,8 @@ namespace FhirStarter.Bonfire.STU3.Filter
                 operationOutcome = serializer.Parse<OperationOutcome>(exceptionMessage);
             }
             var outCome = operationOutcome ?? GetOperationOutCome(context.Exception);
-
             var xmlSerializer = new FhirXmlSerializer();
             var xml = xmlSerializer.SerializeToString(outCome);
-
-           // var xml = FhirSerializer.SerializeResourceToXml(outCome);
             var internalOutCome = new FhirXmlParser().Parse<OperationOutcome>(xml);
             internalOutCome.Issue[0].Diagnostics = context.Exception.StackTrace;
             xml = xmlSerializer.SerializeToString(internalOutCome);
@@ -53,24 +51,27 @@ namespace FhirStarter.Bonfire.STU3.Filter
             var acceptJson = acceptEntry.Contains(FhirMediaType.HeaderTypeJson);
             var jsonSerializer = new FhirJsonSerializer();
             var xmlSerializer = new FhirXmlSerializer();
-            if (acceptJson)
+            var statusCode = HttpStatusCode.InternalServerError;
+            if (context.Exception is ValidateInputException)
             {
-                //var json = FhirSerializer.SerializeToJson(outCome);
+                statusCode = HttpStatusCode.BadRequest;
+            }
+            if (acceptJson)
+            {                
                 var json = jsonSerializer.SerializeToString(outCome);
                 context.Response = new HttpResponseMessage
                 {
                     Content = new StringContent(json, Encoding.UTF8, FhirMediaType.JsonResource),
-                    StatusCode = HttpStatusCode.InternalServerError
+                    StatusCode = statusCode
                 };
             }
             else
             {
-                //var xml = FhirSerializer.SerializeToXml(outCome);
                 var xml = xmlSerializer.SerializeToString(outCome);
                 context.Response = new HttpResponseMessage
                 {
                     Content = new StringContent(xml, Encoding.UTF8, FhirMediaType.XmlResource),
-                    StatusCode = HttpStatusCode.InternalServerError
+                    StatusCode = statusCode
                 };
             }
         }

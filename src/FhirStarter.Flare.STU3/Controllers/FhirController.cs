@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Xml.Linq;
+using FhirStarter.Bonfire.STU3.Exceptions;
 using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Service;
 using FhirStarter.Bonfire.STU3.Validation;
@@ -147,16 +148,10 @@ namespace FhirStarter.Flare.STU3.Controllers
         [HttpPost, Route("{type}")]
         public HttpResponseMessage Create(string type, Resource resource)
         {
-            var xmlSerializer = new FhirXmlSerializer();
-            var xml =xmlSerializer.SerializeToString(resource);
-            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
-            
-            resource = (Resource) ValidateResource(resource);
-            if (resource is OperationOutcome)
-            {
-                return SendResponse(resource);
-            }
-            return _handler.ResourceCreate(type, resource, service);
+            var xmlSerializer = new FhirXmlSerializer();            
+            var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);            
+            resource = (Resource) ValidateResource(resource, true);
+            return resource is OperationOutcome ? SendResponse(resource) : _handler.ResourceCreate(type, resource, service);
         }
 
         [HttpPut, Route("{type}/{id}")]
@@ -187,35 +182,32 @@ namespace FhirStarter.Flare.STU3.Controllers
             var returnJson = ReturnJson(accept);
             if (!(resource is OperationOutcome))
             {
-                resource = ValidateResource((Resource)resource);
-            }
-            
-
+                resource = ValidateResource((Resource)resource, false);
+            }            
             StringContent httpContent;
             if (!returnJson)
             {
                 var xmlSerializer = new FhirXmlSerializer();
-
-                // var xml = FhirSerializer.SerializeToXml(resource);
-                var xml = xmlSerializer.SerializeToString(resource);
                 httpContent =
-                    new StringContent(xml, Encoding.UTF8,
-                     FhirMediaType.XmlResource);
+                    GetHttpContent(xmlSerializer.SerializeToString(resource), FhirMediaType.XmlResource);
             }
             else
             {
                 var jsonSerializer = new FhirJsonSerializer();
-
                 httpContent =
-                      //  new StringContent(FhirSerializer.SerializeToJson(resource), Encoding.UTF8,
-                    new StringContent(jsonSerializer.SerializeToString(resource), Encoding.UTF8,
-                     FhirMediaType.JsonResource);
+                    GetHttpContent(jsonSerializer.SerializeToString(resource), FhirMediaType.JsonResource);
             }
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = httpContent };
             return response;
         }
 
-        private Base ValidateResource(Resource resource)
+        private static StringContent GetHttpContent(string serializedValue, string resourceType)
+        {
+            return new StringContent(serializedValue, Encoding.UTF8,
+                resourceType);
+        }
+
+        private Base ValidateResource(Resource resource, bool isInput)
         {
 
             if (_profileValidator == null) return resource;
@@ -230,7 +222,14 @@ namespace FhirStarter.Flare.STU3.Controllers
                                 resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
                     if (!found)
                     {
-                        throw new ArgumentException($"Profile for {resourceName} must be set to: {structureDefinition.Url}");
+                        var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
+                        if (isInput)
+                        {
+                            throw new ValidateInputException(message);
+                        }
+
+                        throw new ValidateOutputException(message);
+
                     }
                 }
                 

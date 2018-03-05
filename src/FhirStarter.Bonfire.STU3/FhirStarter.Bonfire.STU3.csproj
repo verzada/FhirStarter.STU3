@@ -75,6 +75,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ValidateInputException.cs" />
+    <Compile Include="Exceptions\ValidateOutputException.cs" />
     <Compile Include="Filter\AbstractExceptionFilter.cs" />
     <Compile Include="Filter\ExceptionFilter.cs" />
     <Compile Include="Helper\UrlHandler.cs" />
