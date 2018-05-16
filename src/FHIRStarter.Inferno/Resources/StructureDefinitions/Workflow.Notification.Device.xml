@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <id value="7cf17965-13f6-42ef-939e-631484f422d9" />
+  <meta>
+    <versionId value="1" />
+    <lastUpdated value="2017-11-27T14:34:25.487+01:00" />
+  </meta>
+  <url value="http://helse-nord.no/fhir/StructureDefinition/Workflow.Notification/Device_HN" />
+  <version value="1.0" />
+  <name value="Device Helse Nord" />
+  <title value="Device Helse Nord" />
+  <status value="draft" />
+  <date value="2017-08-30T14:29:00.447+02:00" />
+  <publisher value="Helse Nord IKT" />
+  <description value="Helse Nord profile for Device" />
+  <purpose value="Recipient device holder" />
+  <fhirVersion value="3.0.1" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="Device" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Device" />
+  <derivation value="constraint" />
+  <differential>
+    <element id="Device">
+      <path value="Device" />
+      <comment value="Recipient device profile Helse nord." />
+    </element>
+    <element id="Device.meta">
+      <path value="Device.meta" />
+      <min value="1" />
+    </element>
+    <element id="Device.implicitRules">
+      <path value="Device.implicitRules" />
+      <max value="0" />
+    </element>
+    <element id="Device.language">
+      <path value="Device.language" />
+      <max value="0" />
+    </element>
+    <element id="Device.contained">
+      <path value="Device.contained" />
+      <max value="0" />
+    </element>
+    <element id="Device.identifier">
+      <path value="Device.identifier" />
+      <max value="0" />
+    </element>
+    <element id="Device.udi">
+      <path value="Device.udi" />
+      <max value="0" />
+    </element>
+    <element id="Device.lotNumber">
+      <path value="Device.lotNumber" />
+      <max value="0" />
+    </element>
+    <element id="Device.manufacturer">
+      <path value="Device.manufacturer" />
+      <max value="0" />
+    </element>
+    <element id="Device.manufactureDate">
+      <path value="Device.manufactureDate" />
+      <max value="0" />
+    </element>
+    <element id="Device.expirationDate">
+      <path value="Device.expirationDate" />
+      <max value="0" />
+    </element>
+    <element id="Device.model">
+      <path value="Device.model" />
+      <max value="0" />
+    </element>
+    <element id="Device.version">
+      <path value="Device.version" />
+      <max value="0" />
+    </element>
+    <element id="Device.patient">
+      <path value="Device.patient" />
+      <max value="0" />
+    </element>
+    <element id="Device.owner">
+      <path value="Device.owner" />
+      <max value="0" />
+    </element>
+    <element id="Device.contact">
+      <path value="Device.contact" />
+      <min value="1" />
+    </element>
+    <element id="Device.location">
+      <path value="Device.location" />
+      <max value="0" />
+    </element>
+    <element id="Device.url">
+      <path value="Device.url" />
+      <max value="0" />
+    </element>
+    <element id="Device.safety">
+      <path value="Device.safety" />
+      <max value="0" />
+    </element>
+  </differential>
+</StructureDefinition>

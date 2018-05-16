@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <id value="c046da46-c2cf-41a3-8485-df7a19863e88" />
+  <meta>
+    <versionId value="1" />
+    <lastUpdated value="2018-02-20T14:21:32.905+01:00" />
+  </meta>
+  <url value="http://helse-nord.no/fhir/StructureDefinition/Workflow.Notification/CommunicationRequest_HN" />
+  <version value="1.0" />
+  <name value="CommunicationRequest Helse Nord " />
+  <title value="CommunicationRequest Helse Nord " />
+  <status value="draft" />
+  <date value="2017-08-30T14:32:55.716+02:00" />
+  <publisher value="Helse Nord IKT" />
+  <description value="Helse Nord profile for CommunicationRequest" />
+  <purpose value="Profile for CommunicationRequest in Helse Nord, primarily or firstly for SMS communication." />
+  <fhirVersion value="3.0.1" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="CommunicationRequest" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/CommunicationRequest" />
+  <derivation value="constraint" />
+  <differential>
+    <element id="CommunicationRequest">
+      <path value="CommunicationRequest" />
+      <comment value="CommunicationRequest HelseNord notification service." />
+    </element>
+    <element id="CommunicationRequest.implicitRules">
+      <path value="CommunicationRequest.implicitRules" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.language">
+      <path value="CommunicationRequest.language" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.identifier">
+      <path value="CommunicationRequest.identifier" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.basedOn">
+      <path value="CommunicationRequest.basedOn" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.replaces">
+      <path value="CommunicationRequest.replaces" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.groupIdentifier">
+      <path value="CommunicationRequest.groupIdentifier" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.category">
+      <path value="CommunicationRequest.category" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="CommunicationRequest.category.coding">
+      <path value="CommunicationRequest.category.coding" />
+      <code>
+        <system value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+        <version value="1.0" />
+        <code value="OneWay" />
+        <display value="One way SMS" />
+        <userSelected value="false" />
+      </code>
+      <code>
+        <system value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+        <version value="1.0" />
+        <code value="TwoWay" />
+        <display value="Two way SMS" />
+      </code>
+      <slicing>
+        <discriminator>
+          <type value="type" />
+          <path value="system" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+      <min value="2" />
+      <max value="2" />
+      <binding>
+        <strength value="required" />
+        <description value="CommunicationType" />
+        <valueSetUri value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+      </binding>
+    </element>
+    <element id="CommunicationRequest.category.coding.system">
+      <path value="CommunicationRequest.category.coding.system" />
+      <short value="Helse Nord specific system to determine communication type" />
+      <definition value="The code system defines whether this is a OneWay or TwoWay communication when the medium is SMS." />
+      <min value="1" />
+      <fixedUri value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+    </element>
+    <element id="CommunicationRequest.category.coding.code">
+      <path value="CommunicationRequest.category.coding.code" />
+      <min value="1" />
+      <binding>
+        <strength value="required" />
+        <description value="I am fine" />
+      </binding>
+    </element>
+    <element id="CommunicationRequest.category.coding:sliceCommunicationType">
+      <path value="CommunicationRequest.category.coding" />
+      <sliceName value="sliceCommunicationType" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="CommunicationRequest.category.coding:sliceCommunicationType.system">
+      <path value="CommunicationRequest.category.coding.system" />
+      <fixedUri value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+    </element>
+    <element id="CommunicationRequest.category.coding:sliceCommunicationType.code">
+      <path value="CommunicationRequest.category.coding.code" />
+      <code>
+        <system value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+        <code value="Oneway" />
+      </code>
+      <code>
+        <system value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+        <code value="Twoway" />
+      </code>
+    </element>
+    <element id="CommunicationRequest.category.coding:sliceCategory">
+      <path value="CommunicationRequest.category.coding" />
+      <sliceName value="sliceCategory" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="CommunicationRequest.category.coding:sliceCategory.system">
+      <path value="CommunicationRequest.category.coding.system" />
+      <fixedUri value="http://hl7.org/fhir/communication-category" />
+    </element>
+    <element id="CommunicationRequest.priority">
+      <path value="CommunicationRequest.priority" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.medium">
+      <path value="CommunicationRequest.medium" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="CommunicationRequest.medium.coding">
+      <path value="CommunicationRequest.medium.coding" />
+      <code>
+        <code value="SMS" />
+        <display value="SMS" />
+      </code>
+      <code>
+        <code value="FLASH" />
+        <display value="FLASH" />
+        <userSelected value="false" />
+      </code>
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="CommunicationRequest.medium.coding.system">
+      <path value="CommunicationRequest.medium.coding.system" />
+      <fixedUri value="http://helse-nord.no/fhir/coding/system/communicationmedium" />
+    </element>
+    <element id="CommunicationRequest.recipient">
+      <path value="CommunicationRequest.recipient" />
+      <min value="1" />
+      <max value="1" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/fhir/StructureDefinition/Workflow.Notification/Device_HN" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element id="CommunicationRequest.topic">
+      <path value="CommunicationRequest.topic" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.occurrence[x]:occurrenceDateTime">
+      <path value="CommunicationRequest.occurrenceDateTime" />
+      <sliceName value="occurrenceDateTime" />
+      <type>
+        <code value="dateTime" />
+      </type>
+    </element>
+    <element id="CommunicationRequest.sender">
+      <path value="CommunicationRequest.sender" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Organization" />
+      </type>
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/fhir/StructureDefinition/Clinical.Organization/Organization_HN" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element id="CommunicationRequest.requester">
+      <path value="CommunicationRequest.requester" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.reasonCode">
+      <path value="CommunicationRequest.reasonCode" />
+      <max value="0" />
+    </element>
+    <element id="CommunicationRequest.reasonReference">
+      <path value="CommunicationRequest.reasonReference" />
+      <max value="0" />
+    </element>
+  </differential>
+</StructureDefinition>

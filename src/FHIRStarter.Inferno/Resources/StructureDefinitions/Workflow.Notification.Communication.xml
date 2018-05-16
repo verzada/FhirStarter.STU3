@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <id value="ad37f7d9-2096-43ac-bd78-9876a82537b0" />
+  <meta>
+    <versionId value="1" />
+    <lastUpdated value="2018-02-20T14:26:52.701+01:00" />
+  </meta>
+  <url value="http://helse-nord.no/fhir/StructureDefinition/Workflow.Notification/Communication_HN" />
+  <version value="1.0" />
+  <name value="Communication Helse Nord " />
+  <title value="Communication Helse Nord " />
+  <status value="draft" />
+  <date value="2017-08-30T14:08:12.522+02:00" />
+  <publisher value="Helse Nord IKT" />
+  <description value="Helse Nord profile for Communication." />
+  <purpose value="Helse Nord profile for SMS Communication." />
+  <fhirVersion value="3.0.1" />
+  <kind value="resource" />
+  <abstract value="false" />
+  <type value="Communication" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Communication" />
+  <derivation value="constraint" />
+  <differential>
+    <element id="Communication">
+      <path value="Communication" />
+      <comment value="Communication profile Helse Nord Notification." />
+    </element>
+    <element id="Communication.implicitRules">
+      <path value="Communication.implicitRules" />
+      <max value="0" />
+    </element>
+    <element id="Communication.language">
+      <path value="Communication.language" />
+      <max value="0" />
+    </element>
+    <element id="Communication.text">
+      <path value="Communication.text" />
+      <max value="0" />
+    </element>
+    <element id="Communication.identifier">
+      <path value="Communication.identifier" />
+      <max value="0" />
+    </element>
+    <element id="Communication.definition">
+      <path value="Communication.definition" />
+      <max value="0" />
+    </element>
+    <element id="Communication.basedOn">
+      <path value="Communication.basedOn" />
+      <max value="1" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/fhir/structuredefinitions/Workflow.Notification/CommunicationRequest_HN" />
+      </type>
+    </element>
+    <element id="Communication.partOf">
+      <path value="Communication.partOf" />
+      <max value="0" />
+    </element>
+    <element id="Communication.notDone">
+      <path value="Communication.notDone" />
+      <max value="0" />
+    </element>
+    <element id="Communication.notDoneReason">
+      <path value="Communication.notDoneReason" />
+      <max value="0" />
+    </element>
+    <element id="Communication.recipient">
+      <path value="Communication.recipient" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/fhir/StructureDefinition/Workflow.Notification/Device_HN" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element id="Communication.topic">
+      <path value="Communication.topic" />
+      <max value="0" />
+    </element>
+    <element id="Communication.sender">
+      <path value="Communication.sender" />
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://hl7.org/fhir/StructureDefinition/Organization" />
+      </type>
+      <type>
+        <code value="Reference" />
+        <targetProfile value="http://helse-nord.no/fhir/StructureDefinition/Clinical.Organization/Organization_HN" />
+        <aggregation value="contained" />
+      </type>
+    </element>
+    <element id="Communication.reasonCode">
+      <path value="Communication.reasonCode" />
+      <max value="0" />
+    </element>
+    <element id="Communication.reasonReference">
+      <path value="Communication.reasonReference" />
+      <max value="0" />
+    </element>
+    <element id="Communication.payload.content[x]:contentString">
+      <path value="Communication.payload.contentString" />
+      <sliceName value="contentString" />
+      <type>
+        <code value="string" />
+      </type>
+    </element>
+  </differential>
+</StructureDefinition>

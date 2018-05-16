@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommunicationRequest xmlns="http://hl7.org/fhir">
+  <contained>
+    <Organization>
+      <id value="sender" />
+      <telecom>
+        <system value="phone" />
+        <value value="Helse Nord" />
+      </telecom>
+      <identifier>
+        <system value="http://helse-nord.no/fhir/organization/resh" />
+        <value value="101971" />
+      </identifier>
+    </Organization>
+  </contained>
+  <contained>
+    <Device>
+      <meta>
+        <profile value="http://helse-nord.no/fhir/StructureDefinition/Workflow.Notification/Device_HN" />
+      </meta>
+      <id value="receiver" />
+      <type>
+        <text value="notificationrecipient" />
+      </type>
+      <contact>
+        <system value="phone" />
+        <value value="92044363" />
+      </contact>
+    </Device>
+  </contained>
+  <meta>
+    <profile value="http://helse-nord.no/fhir/StructureDefinition/Workflow.Notification/CommunicationRequest_HN" />
+  </meta>
+  <sender>
+    <reference value="#sender" />
+    <identifier>
+      <system value="http://helse-nord.no/fhir/notification/sendersystem" />
+      <value value="133353a3-eaba-4eb8-9885-a5eb4310513d" />
+    </identifier>
+  </sender>
+  <recipient>
+    <reference value="#receiver" />
+  </recipient>
+  <payload>
+    <contentString value="bye bye snuppa&#xD;&#xA;" />
+  </payload>
+  <medium>
+    <coding>
+      <system value="http://helse-nord.no/fhir/coding/system/communicationmedium" />
+      <code value="Sms" />
+    </coding>
+  </medium>
+  <status value="active" />
+  <subject>
+    <identifier>
+      <system value="urn:oid:2.16.578.1.12.4.1.4.1" />
+    </identifier>
+  </subject>
+  <category>
+    <coding>
+      <system value="http://helse-nord.no/fhir/coding/system/communicationtype" />
+      <code value="Oneway" />
+    </coding>
+    <coding>
+      <system value="http://hl7.org/fhir/communication-category" />
+      <code value="alert" />
+    </coding>
+  </category>
+</CommunicationRequest>

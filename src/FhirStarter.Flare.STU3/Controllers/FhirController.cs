@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,7 +6,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using System.Xml.Linq;
 using FhirStarter.Bonfire.STU3.Exceptions;
 using FhirStarter.Bonfire.STU3.Interface;
 using FhirStarter.Bonfire.STU3.Service;
@@ -31,6 +29,7 @@ namespace FhirStarter.Flare.STU3.Controllers
         private readonly AbstractStructureDefinitionService _abstractStructureDefinitionService;
         private readonly ServiceHandler _handler = new ServiceHandler();
         private readonly ProfileValidator _profileValidator;
+        private static readonly string ValidationLock = "SomeLockValue";
 
         public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, ProfileValidator profileValidator, AbstractStructureDefinitionService abstractStructureDefinitionService)
         {
@@ -209,40 +208,38 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         private Base ValidateResource(Resource resource, bool isInput)
         {
-
-            if (_profileValidator == null) return resource;
-            if (resource is OperationOutcome) return resource;
-            
+            lock (ValidationLock)
             {
-                var resourceName = resource.TypeName;
-                var structureDefinition = Load(true, resourceName);
-                if (structureDefinition != null)
+                if (_profileValidator == null) return resource;
+                if (resource is OperationOutcome) return resource;
                 {
-                    var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
-                                resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
-                    if (!found)
+                    var resourceName = resource.TypeName;
+                    var structureDefinition = Load(true, resourceName);
+                    if (structureDefinition != null)
                     {
-                        var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
-                        if (isInput)
+                        var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
+                                    resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
+                        if (!found)
                         {
-                            throw new ValidateInputException(message);
+                            var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
+                            if (isInput)
+                            {
+                                throw new ValidateInputException(message);
+                            }
+
+                            throw new ValidateOutputException(message);
+
                         }
-
-                        throw new ValidateOutputException(message);
-
                     }
+
                 }
-                
-            }
-
-            var validationResult = _profileValidator.Validate(resource, true, false);
-            if (validationResult.Issue.Count > 0)
-            {
-                resource = validationResult;
-            }
-
-
-            return resource;
+                var validationResult = _profileValidator.Validate(resource, true, false);
+                if (validationResult.Issue.Count > 0)
+                {
+                    resource = validationResult;
+                }
+                return resource;
+            }            
         }
 
         private static bool ReturnJson(HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> accept)
