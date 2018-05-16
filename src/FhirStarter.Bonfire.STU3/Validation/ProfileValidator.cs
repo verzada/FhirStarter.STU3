@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Hl7.Fhir.Validation;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -12,6 +13,8 @@ namespace FhirStarter.Bonfire.STU3.Validation
 {
     public class ProfileValidator
     {
+        private static readonly log4net.ILog Log =
+            log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static Validator _validator;
         public ProfileValidator(Validator validator)
         {
@@ -23,18 +26,30 @@ namespace FhirStarter.Bonfire.STU3.Validation
 
         public OperationOutcome Validate(Resource resource, bool onlyErrors=true, bool threadedValidation=true)
         {
-            
+            OperationOutcome result = null;
             if (!(resource is Bundle) || !threadedValidation)
             {
                 var xmlSerializer = new FhirXmlSerializer();
                 //    using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(resource)).CreateReader())
                 using (var reader = XDocument.Parse(xmlSerializer.SerializeToString(resource)).CreateReader())
                 {
-                    return RunValidation(onlyErrors, reader);
+                    result =  RunValidation(onlyErrors, reader);
                 }
             }
-            var bundle = (Bundle)resource;
-            return RunBundleValidation(onlyErrors, bundle);
+            else
+            {
+                var bundle = (Bundle)resource;
+                result =  RunBundleValidation(onlyErrors, bundle);
+            }
+
+            if (result.Issue.Count > 0)
+            {
+                Log.Warn("Validation failed");
+                Log.Warn("Request: " + XDocument.Parse(new FhirXmlSerializer().SerializeToString(resource)));
+                Log.Warn("Response:" + XDocument.Parse(new FhirXmlSerializer().SerializeToString(result)));                                
+            }
+
+            return result;
         }
 
         private static OperationOutcome RunBundleValidation(bool onlyErrors, Bundle bundle)
