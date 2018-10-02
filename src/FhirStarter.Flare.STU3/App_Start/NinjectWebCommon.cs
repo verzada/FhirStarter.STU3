@@ -79,8 +79,8 @@ namespace FhirStarter.Flare.STU3
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            try
-            {
+            //try
+            //{
                 var mockupService = typeof(IFhirMockupService);
                 var fhirService = typeof(IFhirService);
                 var fhirStructureDefinition = typeof(AbstractStructureDefinitionService);
@@ -95,17 +95,18 @@ namespace FhirStarter.Flare.STU3
                 var serviceAssemblies = AssemblyLoaderHelper.GetFhirServiceAssemblies();
                 foreach (var asm in serviceAssemblies)
                 {
+                    var types = asm.GetTypes();
                     foreach (var classType in asm.GetTypes())
                     {
                         BindIFhirServices(kernel, serviceTypes, classType);
                     }
                 }
 
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                ExceptionLogger.LogReflectionTypeLoadException(ex);
-            }
+            //}
+            //catch (ReflectionTypeLoadException ex)
+            //{
+             //   ExceptionLogger.LogReflectionTypeLoadException(ex);
+            //}
 
             CheckForLackingServices();
 
