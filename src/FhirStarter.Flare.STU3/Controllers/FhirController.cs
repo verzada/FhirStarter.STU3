@@ -197,6 +197,10 @@ namespace FhirStarter.Flare.STU3.Controllers
                     GetHttpContent(jsonSerializer.SerializeToString(resource), FhirMediaType.JsonResource);
             }
             var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = httpContent };
+            if (resource is OperationOutcome)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+            }
             return response;
         }
 
