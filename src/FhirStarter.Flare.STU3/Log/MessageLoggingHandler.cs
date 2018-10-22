@@ -3,12 +3,8 @@ using System.Configuration;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
-using System.Web.Http;
 using System.Xml.Linq;
-using Spark.Engine.Filters;
 
 namespace FhirStarter.Flare.STU3.Log
 {
@@ -41,22 +37,20 @@ namespace FhirStarter.Flare.STU3.Log
         {
             if (string.IsNullOrEmpty(settingsValue))
             {
-                if (isAppSettings)
-                {
-                    Log.Warn(
-                        $"The config file does not contain the AppSetting {LogRequestWhenError}. It should be set to true if incoming requests needs to be logged");
-                }
-                else
-                {
-                    Log.Warn($"The incoming settings from the construct call {nameof(MessageLoggingHandler)} is empty or null. Incoming requests will not be logged by default.");
-                }
+                Log.Warn(
+                    isAppSettings
+                        ? $"The config file does not contain the AppSetting {LogRequestWhenError}. It should be set to true if incoming requests needs to be logged"
+                        : $"The incoming settings from the construct call {nameof(MessageLoggingHandler)} is empty or null. Incoming requests will not be logged by default.");
 
                 return false;
             }
             
             var logRequests = Convert.ToBoolean(settingsValue);
-            if(logRequests && isAppSettings)
-            { Log.Info($"Incoming requests will be logged since {LogRequestWhenError} is set to true");}
+
+            if (logRequests && isAppSettings)
+            {
+                Log.Info($"Incoming requests will be logged since {LogRequestWhenError} is set to true");
+            }
 
             else if (logRequests)
             {
@@ -114,15 +108,22 @@ namespace FhirStarter.Flare.STU3.Log
             }
         }
 
+        /// <summary>
+        /// Handling exceptions that arrive as a zipped stream
+        /// </summary>
+        /// <param name="responseMessage"></param>
+        /// <returns></returns>
         private static async Task<string> GetUnzippedResponse(HttpResponseMessage responseMessage)
         {
-            var responseStream = await responseMessage.Content.ReadAsStreamAsync();            
+            var responseStream = await responseMessage.Content.ReadAsStreamAsync();  
+
+            // zipStream must be outside a 'using bracket' since it is not possible to close the zip stream within a 'using bracket'
             var zipStream = new GZipStream(responseStream, CompressionMode.Decompress);
             using (var resultStream = new MemoryStream())
             {
                 zipStream.CopyTo(resultStream);
-                var r = resultStream.ToArray();
-                return System.Text.Encoding.Default.GetString(r);
+                var exceptionStream = resultStream.ToArray();
+                return System.Text.Encoding.Default.GetString(exceptionStream);
             }                
         }       
     }
