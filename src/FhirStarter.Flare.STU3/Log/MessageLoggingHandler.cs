@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Xml.Linq;
+using Spark.Engine.Filters;
 
 namespace FhirStarter.Flare.STU3.Log
 {
@@ -89,16 +95,35 @@ namespace FhirStarter.Flare.STU3.Log
             {
                 if (responseMessage.Content != null)
                 {
-                    var exception = responseMessage.Content.ReadAsAsync<HttpError>();
-                    await Task.Run(() =>
+                    var responseMessageDetailed = await GetUnzippedResponse(responseMessage);
+                    try
                     {
-                        Log.Error(!_logRequest
-                            ? $"ReqLength: {requestMessage.Length}; ResLength: {responseLength}; Hostname: {host}; Path: {hostname.PathAndQuery}; Elapsed: {diff}; Exception: {exception.Result.ExceptionMessage}; Stacktrace: {exception.Result.StackTrace}"
-                            : $"ReqLength: {requestMessage.Length}; ResLength: {responseLength}; Hostname: {host}; Path: {hostname.PathAndQuery}; Elapsed: {diff}; Exception: {exception.Result.ExceptionMessage}; Request: {System.Text.Encoding.Default.GetString(requestMessage)}; Stacktrace: {exception.Result.StackTrace}");
-                    });
+                        var document = XDocument.Parse(responseMessageDetailed);
+                        responseMessageDetailed = document.ToString();
+                    }
+                    finally
+                    {
+                        await Task.Run(() =>
+                        {
+                            Log.Error(!_logRequest
+                                ? $"ReqLength: {requestMessage.Length}; ResLength: {responseLength}; Hostname: {host}; Path: {hostname.PathAndQuery}; Elapsed: {diff}; Outcome: {responseMessageDetailed};"
+                                : $"ReqLength: {requestMessage.Length}; ResLength: {responseLength}; Hostname: {host}; Path: {hostname.PathAndQuery}; Elapsed: {diff}; Outcome: {responseMessageDetailed}; Request: {System.Text.Encoding.Default.GetString(requestMessage)};");
+                        });
+                    }
                 }
-                
             }
         }
+
+        private static async Task<string> GetUnzippedResponse(HttpResponseMessage responseMessage)
+        {
+            var responseStream = await responseMessage.Content.ReadAsStreamAsync();            
+            var zipStream = new GZipStream(responseStream, CompressionMode.Decompress);
+            using (var resultStream = new MemoryStream())
+            {
+                zipStream.CopyTo(resultStream);
+                var r = resultStream.ToArray();
+                return System.Text.Encoding.Default.GetString(r);
+            }                
+        }       
     }
 }
