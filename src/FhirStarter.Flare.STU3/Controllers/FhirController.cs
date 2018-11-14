@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using FhirStarter.Bonfire.STU3.Exceptions;
@@ -30,6 +33,8 @@ namespace FhirStarter.Flare.STU3.Controllers
         private readonly ServiceHandler _handler = new ServiceHandler();
         private readonly ProfileValidator _profileValidator;
         private static readonly string ValidationLock = "SomeLockValue";
+        private static string OverrideValidationIsAllowed = nameof(OverrideValidationIsAllowed);
+            
 
         public FhirController(ICollection<IFhirService> services, ICollection<IFhirMockupService> mockupServices, ProfileValidator profileValidator, AbstractStructureDefinitionService abstractStructureDefinitionService)
         {
@@ -208,38 +213,64 @@ namespace FhirStarter.Flare.STU3.Controllers
 
         private Base ValidateResource(Resource resource, bool isInput)
         {
+            if (OverrideValidation())
+                return resource;
+
+
             lock (ValidationLock)
             {
                 if (_profileValidator == null) return resource;
                 if (resource is OperationOutcome) return resource;
+                
+                var resourceName = resource.TypeName;
+                var structureDefinition = Load(true, resourceName);
+                if (structureDefinition != null)
                 {
-                    var resourceName = resource.TypeName;
-                    var structureDefinition = Load(true, resourceName);
-                    if (structureDefinition != null)
+                    var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
+                                resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
+                    if (!found)
                     {
-                        var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
-                                    resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
-                        if (!found)
+                        var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
+                        if (isInput)
                         {
-                            var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
-                            if (isInput)
-                            {
-                                throw new ValidateInputException(message);
-                            }
-
-                            throw new ValidateOutputException(message);
-
+                            throw new ValidateInputException(message);
                         }
-                    }
 
+                        throw new ValidateOutputException(message);
+
+                    }
                 }
+
                 var validationResult = _profileValidator.Validate(resource, true, false);
                 if (validationResult.Issue.Count > 0)
                 {
                     resource = validationResult;
                 }
                 return resource;
-            }            
+            }
+        }
+
+        private static bool OverrideValidation()
+        {
+            var currentRequestUrl = HttpContext.Current?.Request.Url;
+            var validationIsOff = currentRequestUrl != null && currentRequestUrl.AbsoluteUri.Contains("validation=off");
+
+            if (validationIsOff)
+            {
+                var configManagerValue = ConfigurationManager.AppSettings[OverrideValidationIsAllowed];
+                if (!string.IsNullOrEmpty(configManagerValue))
+                {
+                    bool.TryParse(configManagerValue, out var overrideValidationIsAllowed);
+                    if (overrideValidationIsAllowed)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+                throw new ArgumentException($"The app setting {OverrideValidationIsAllowed} is either null or does not exist. To use the 'validation=off' parameter, the {OverrideValidationIsAllowed} must be set to true in the web.config");
+            }
+            return false;
         }
 
         private static bool ReturnJson(HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> accept)

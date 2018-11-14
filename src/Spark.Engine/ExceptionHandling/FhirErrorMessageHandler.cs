@@ -20,7 +20,6 @@ namespace Spark.Engine.ExceptionHandling
                 var content = response.Content as ObjectContent;
                 if (content != null && content.ObjectType == typeof (HttpError))
                 {
-                  //  var outcome = new OperationOutcome().AddError(response.ReasonPhrase);
                     var issue = new OperationOutcome.IssueComponent
                     {
                         Details = new CodeableConcept(nameof(HttpError), nameof(HttpError), response.ReasonPhrase)

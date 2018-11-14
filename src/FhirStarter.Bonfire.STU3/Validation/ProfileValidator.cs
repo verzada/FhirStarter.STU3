@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Hl7.Fhir.Validation;
 using System.Linq;
 using System.Reflection;
@@ -26,7 +25,7 @@ namespace FhirStarter.Bonfire.STU3.Validation
 
         public OperationOutcome Validate(Resource resource, bool onlyErrors=true, bool threadedValidation=true)
         {
-            OperationOutcome result = null;
+            OperationOutcome result;
             if (!(resource is Bundle) || !threadedValidation)
             {
                 var xmlSerializer = new FhirXmlSerializer();
