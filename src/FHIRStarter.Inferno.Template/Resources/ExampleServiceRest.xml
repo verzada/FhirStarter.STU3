@@ -1,4 +1,5 @@
-﻿<CapabilityStatement xmlns="http://hl7.org/fhir">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CapabilityStatement xmlns="http://hl7.org/fhir">
   <rest>
     <mode value="server"/>
     <resource>

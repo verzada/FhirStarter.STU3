@@ -133,7 +133,6 @@ namespace FhirStarter.Flare.STU3.Controllers
         {
             var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
             var parameters = Request.GetSearchParams();
-            if (!(parameters.Parameters.Count > 0)) return new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
             var results = service.Read(parameters);
             return SendResponse(results);
         }
