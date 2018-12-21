@@ -190,7 +190,7 @@ namespace FhirStarter.Inferno.Template.Services
                     throw new ArgumentException(serialized);
                 }
             }
-            throw new ArgumentException("Generic error");
+            throw new ArgumentException($"No parameters received for the {nameof(ExamplePatientService)} ");
         }
 
         public Base Read(string id)
