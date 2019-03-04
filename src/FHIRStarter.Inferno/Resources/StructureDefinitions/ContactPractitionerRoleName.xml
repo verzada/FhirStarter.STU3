@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StructureDefinition xmlns="http://hl7.org/fhir">
+  <meta>
+    <lastUpdated value="2017-11-03T13:33:34.352+01:00" />
+  </meta>
+  <url value="http://helse-nord.no/fhir/StructureDefinition/Clinical.Patient/ContactPractitionerRoleName" />
+  <version value="1.0" />
+  <name value="ContactPractitionerRoleName" />
+  <title value="Contact role" />
+  <status value="draft" />
+  <date value="2017-10-09T12:51:16.63+02:00" />
+  <publisher value="Helse Nord IKT" />
+  <description value="Describes the role of a contactperson (practitioner)" />
+  <purpose value="Describes the role of a contactperson (practitioner)." />
+  <fhirVersion value="3.0.1" />
+  <kind value="complex-type" />
+  <abstract value="false" />
+  <contextType value="resource" />
+  <context value="Patient.contact" />
+  <type value="Extension" />
+  <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Extension" />
+  <derivation value="constraint" />
+  <differential>
+    <element id="Extension.url">
+      <path value="Extension.url" />
+      <fixedUri value="http://helse-nord.no/fhir/StructureDefinition/Clinical.Patient/ContactPractitionerRoleName" />
+    </element>
+    <element id="Extension.value[x]:valueString">
+      <path value="Extension.valueString" />
+      <sliceName value="valueString" />
+      <type>
+        <code value="string" />
+      </type>
+    </element>
+  </differential>
+</StructureDefinition>

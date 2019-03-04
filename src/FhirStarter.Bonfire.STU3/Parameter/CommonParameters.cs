@@ -185,7 +185,7 @@ namespace FhirStarter.Bonfire.STU3.Parameter
             var dateOperator = GetOperatorForDateOrNumber(enumerable);
             dateStr = RemovePrefix(enumerable.Item2, dateOperator);
             var dateTime = new FhirDateTime(dateStr);
-            dateTimeOffset = dateTime.ToDateTimeOffset();
+            dateTimeOffset = dateTime.ToDateTimeOffset(new TimeSpan());
 
             return dateOperator;
         }

@@ -131,11 +131,11 @@ namespace FhirStarter.Inferno.Template.Services
 
         private static Base MockPatient()
         {
-            var date = new FhirDateTime(DateTime.Now);
+            var date = new FhirDateTime(new DateTimeOffset(DateTime.Now));
 
             return new Patient
             {
-                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(), Profile = new List<string> { "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" } },
+                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(new TimeSpan()), Profile = new List<string> { "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" } },
                 Id = "12345678901",
                 Active = true,
                 Name =
