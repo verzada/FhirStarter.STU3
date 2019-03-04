@@ -49,11 +49,11 @@
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
-    <Reference Include="FhirStarter.Bonfire.STU3, Version=0.9.35.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Bonfire.STU3.0.9.35\lib\net462\FhirStarter.Bonfire.STU3.dll</HintPath>
+    <Reference Include="FhirStarter.Bonfire.STU3, Version=0.9.39.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Bonfire.STU3.0.9.39\lib\net462\FhirStarter.Bonfire.STU3.dll</HintPath>
     </Reference>
-    <Reference Include="FhirStarter.Flare.STU3, Version=0.9.40.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Flare.STU3.0.9.40\lib\net462\FhirStarter.Flare.STU3.dll</HintPath>
+    <Reference Include="FhirStarter.Flare.STU3, Version=0.9.41.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Flare.STU3.0.9.41\lib\net462\FhirStarter.Flare.STU3.dll</HintPath>
     </Reference>
     <Reference Include="Hl7.Fhir.ElementModel, Version=1.1.3.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.ElementModel.1.1.3\lib\net45\Hl7.Fhir.ElementModel.dll</HintPath>
@@ -101,8 +101,8 @@
     <Reference Include="Ninject.Web.WebApi.WebHost, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.Web.WebApi.WebHost.3.3.0\lib\net45\Ninject.Web.WebApi.WebHost.dll</HintPath>
     </Reference>
-    <Reference Include="Spark.Engine, Version=0.9.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FhirStarter.Spark.Engine.STU3.0.9.6\lib\net462\Spark.Engine.dll</HintPath>
+    <Reference Include="Spark.Engine, Version=0.9.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FhirStarter.Spark.Engine.STU3.0.9.7\lib\net462\Spark.Engine.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.IO.Compression" />
