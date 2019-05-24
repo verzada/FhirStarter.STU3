@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web;
 using System.Web.Http;
 using System.Xml.Linq;
@@ -27,9 +28,10 @@ namespace FhirStarter.Bonfire.STU3.Filter
                 Code = OperationOutcome.IssueType.NotFound,
                 Details = new CodeableConcept("StandardException", exception.GetType().ToString(), exception.Message),
             };
-            if (exception.InnerException != null)
+
+            if (ShowStackTraceInOperationOutcome())
             {
-                issue.Diagnostics = exception.InnerException.Message;
+                issue.Diagnostics = exception.StackTrace;
             }
 
             var responseIssue = CheckForHttpResponseException(exception);
@@ -38,6 +40,18 @@ namespace FhirStarter.Bonfire.STU3.Filter
 
             operationOutCome.Issue.Add(issue);
             return operationOutCome;
+        }
+
+        private static bool ShowStackTraceInOperationOutcome()
+        {
+            var stackTraceValue = ConfigurationManager.AppSettings["ShowStacktraceInOperationOutcome"];
+            if (!string.IsNullOrEmpty(stackTraceValue))
+            {
+                bool.TryParse(stackTraceValue, out var booleanResult);
+                return booleanResult;
+            }
+
+            return false;
         }
 
         private static OperationOutcome.IssueComponent CheckForHttpResponseException(Exception exception)
@@ -57,6 +71,10 @@ namespace FhirStarter.Bonfire.STU3.Filter
                             new CodeableConcept("Response", exception.GetType().ToString(),
                                 responseException.Response.ReasonPhrase)
                     };
+                    if (ShowStackTraceInOperationOutcome())
+                    {
+                        responseIssue.Diagnostics = exception.StackTrace;
+                    }
                 }
             }
             return responseIssue;
