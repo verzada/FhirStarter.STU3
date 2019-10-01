@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Reflection;
 using System.Text;
 using System.Web;
 using FhirStarter.Bonfire.STU3.Interface;
-using FhirStarter.Bonfire.STU3.Log;
 using FhirStarter.Bonfire.STU3.Service;
 using FhirStarter.Bonfire.STU3.Validation;
 using FhirStarter.Flare.STU3;
@@ -136,7 +136,10 @@ namespace FhirStarter.Flare.STU3
                     var validator = structureDefinitionService.GetValidator();
                     if (validator != null)
                     {
-                        var profileValidator = new ProfileValidator(validator);
+                        var addResourceToIssue = ConfigurationManager.AppSettings["AddResourceResultToIssue"];
+                        bool.TryParse(addResourceToIssue, out var boolAddResourceToIssue);
+
+                        var profileValidator = new ProfileValidator(validator, boolAddResourceToIssue);
                         kernel.Bind<ProfileValidator>().ToConstant(profileValidator);
                     }
                     _amountOfIFhirStructureDefinitionsInitialized++;
@@ -161,7 +164,7 @@ namespace FhirStarter.Flare.STU3
             if (_amountOfInitializedIFhirServices == 0)
             {
                 const string iFhirServiceErrorMessage = "No services using " + nameof(IFhirService) +
-                                                        " interface has been found and initalized, therefore the FHIR service will not work. Also causes Ninject to throw an exception with \"Server error\" message. Please implement a FHIR service using the " +
+                                                        " interface has been found and initialized, therefore the FHIR service will not work. Also causes Ninject to throw an exception with \"Server error\" message. Please implement a FHIR service using the " +
                                                         nameof(IFhirService) + " interface";
                 strBuilder.AppendLine(iFhirServiceErrorMessage);
                 Log.Fatal(iFhirServiceErrorMessage);
@@ -172,7 +175,7 @@ namespace FhirStarter.Flare.STU3
                 const string structureDefinitionErrorMessage = "Class(es) using " + nameof(AbstractStructureDefinitionService) +
                                                                " was not found in any of the dlls used by the web service. In order for " +
                                                                nameof(StructureDefinition) +
-                                                               "s to be availble, please implement a class using the interface which defines where the " +
+                                                               "s to be available, please implement a class using the interface which defines where the " +
                                                                nameof(StructureDefinition) + "s can be found.";
                 strBuilder.AppendLine(structureDefinitionErrorMessage);
                 Log.Warn(structureDefinitionErrorMessage);
@@ -200,32 +203,6 @@ namespace FhirStarter.Flare.STU3
             if (strBuilder.Length > 0 && throwException)
             {
                 throw new ArgumentException(strBuilder.ToString());
-            }
-        }
-
-
-        private static void BindIFhirServices(IBindingRoot kernel, Type fhirService, Type fhidStructureDefinition,
-            Type classType)
-        {
-            if (!fhirService.IsAssignableFrom(classType) && !fhidStructureDefinition.IsAssignableFrom(classType) ||
-                classType.IsInterface || classType.IsAbstract) return;
-            if (fhirService.IsAssignableFrom(classType))
-            {
-                var instance = (IFhirService)Activator.CreateInstance(classType);
-                kernel.Bind<IFhirService>().ToConstant(instance);
-                _amountOfInitializedIFhirServices++;
-            }
-            else
-            {
-                var structureDefinitionService = (AbstractStructureDefinitionService)Activator.CreateInstance(classType);
-                kernel.Bind<AbstractStructureDefinitionService>().ToConstant(structureDefinitionService);
-                var validator = structureDefinitionService.GetValidator();
-                if (validator != null)
-                {
-                    var profileValidator = new ProfileValidator(validator);
-                    kernel.Bind<ProfileValidator>().ToConstant(profileValidator);
-                }
-                _amountOfIFhirStructureDefinitionsInitialized++;
             }
         }
     }

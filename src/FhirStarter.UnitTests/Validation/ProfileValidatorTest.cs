@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace FhirStarter.UnitTests.Validation
             Debug.Assert(directoryInfo != null, "directoryInfo != null");
             Debug.Assert(directoryInfo.FullName != null, "directoryInfo.FullName != null");
 
+
             var structureDefinitions = directoryInfo.FullName + @"\Resources\StructureDefinitions";
             var includeSubDirectories = new DirectorySourceSettings { IncludeSubDirectories = true };
             var directorySource = new DirectorySource(structureDefinitions, includeSubDirectories);
@@ -44,9 +46,10 @@ namespace FhirStarter.UnitTests.Validation
                 SkipConstraintValidation = false
             };
             var validator = new Validator(settings);
-            _profileValidator = new ProfileValidator(validator);
 
-
+            bool.TryParse(ConfigurationManager.AppSettings["AddResourceResultToIssue"],
+                out bool addResourceResultToIssue);
+            _profileValidator = new ProfileValidator(validator, addResourceResultToIssue);
         }
 
         [TestCase("ValidPatient.xml")]

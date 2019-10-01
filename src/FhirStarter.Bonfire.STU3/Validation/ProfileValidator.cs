@@ -15,40 +15,54 @@ namespace FhirStarter.Bonfire.STU3.Validation
         private static readonly log4net.ILog Log =
             log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static Validator _validator;
-        public ProfileValidator(Validator validator)
+        private static bool _addResourceResultToIssue;
+
+        public ProfileValidator(Validator validator, bool addResourceResultToIssue)
         {
             if (_validator == null)
             {
                 _validator = validator;
-            };            
+            };
+            _addResourceResultToIssue = addResourceResultToIssue;
         }
 
         public OperationOutcome Validate(Resource resource, bool onlyErrors=true, bool threadedValidation=true)
         {
-            OperationOutcome result;
-            if (!(resource is Bundle) || !threadedValidation)
+            OperationOutcome validationError;
+            if (resource.ResourceType != ResourceType.Bundle || !threadedValidation)
             {
                 var xmlSerializer = new FhirXmlSerializer();
                 //    using (var reader = XDocument.Parse(FhirSerializer.SerializeResourceToXml(resource)).CreateReader())
                 using (var reader = XDocument.Parse(xmlSerializer.SerializeToString(resource)).CreateReader())
                 {
-                    result =  RunValidation(onlyErrors, reader);
+                    validationError =  RunValidation(onlyErrors, reader);
                 }
             }
             else
             {
                 var bundle = (Bundle)resource;
-                result =  RunBundleValidation(onlyErrors, bundle);
+                validationError =  RunBundleValidation(onlyErrors, bundle);
             }
 
-            if (result.Issue.Count > 0)
+            if (validationError.Issue.Count > 0)
             {
+                var serializer = new FhirXmlSerializer(new SerializerSettings{Pretty = true});
+
+                var resourceString = serializer.SerializeToString(resource);
+                var validationErrorSerializeToString = serializer.SerializeToString(validationError);
+
+                if (_addResourceResultToIssue)
+                {
+                    var resourceIssue = new OperationOutcome.IssueComponent { Diagnostics = resourceString };
+                    validationError.Issue.Add(resourceIssue);
+                }
+
                 Log.Warn("Validation failed");
-                Log.Warn("Request: " + XDocument.Parse(new FhirXmlSerializer().SerializeToString(resource)));
-                Log.Warn("Response:" + XDocument.Parse(new FhirXmlSerializer().SerializeToString(result)));                                
+                Log.Warn("Response: " + resourceString);
+                Log.Warn("Response:" + validationErrorSerializeToString);                                
             }
 
-            return result;
+            return validationError;
         }
 
         private static OperationOutcome RunBundleValidation(bool onlyErrors, Bundle bundle)
