@@ -58,7 +58,6 @@
     </Reference>
     <Reference Include="Hl7.Fhir.STU3.Core, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.STU3.1.4.0\lib\net45\Hl7.Fhir.STU3.Core.dll</HintPath>
-<<<<<<< HEAD
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Hl7.Fhir.STU3.Specification, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
@@ -76,7 +75,6 @@
     <Reference Include="Hl7.FhirPath, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.FhirPath.1.4.0\lib\net45\Hl7.FhirPath.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-=======
     </Reference>
     <Reference Include="Hl7.Fhir.STU3.Specification, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.Specification.STU3.1.4.0\lib\net45\Hl7.Fhir.STU3.Specification.dll</HintPath>
@@ -89,7 +87,6 @@
     </Reference>
     <Reference Include="Hl7.FhirPath, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.FhirPath.1.4.0\lib\net45\Hl7.FhirPath.dll</HintPath>
->>>>>>> e15c7b0fa8118ef73e082d03c30304fe43196ad1
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>

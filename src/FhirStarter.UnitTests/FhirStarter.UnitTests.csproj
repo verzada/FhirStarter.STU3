@@ -42,17 +42,14 @@
     </Reference>
     <Reference Include="Hl7.Fhir.STU3.Core, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.STU3.1.4.0\lib\net45\Hl7.Fhir.STU3.Core.dll</HintPath>
-<<<<<<< HEAD
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Hl7.Fhir.STU3.Specification, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.Specification.STU3.1.4.0\lib\net45\Hl7.Fhir.STU3.Specification.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
-=======
     </Reference>
     <Reference Include="Hl7.Fhir.STU3.Specification, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.Specification.STU3.1.4.0\lib\net45\Hl7.Fhir.STU3.Specification.dll</HintPath>
->>>>>>> e15c7b0fa8118ef73e082d03c30304fe43196ad1
     </Reference>
     <Reference Include="Hl7.Fhir.Support, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
       <HintPath>..\packages\Hl7.Fhir.Support.1.4.0\lib\net45\Hl7.Fhir.Support.dll</HintPath>
